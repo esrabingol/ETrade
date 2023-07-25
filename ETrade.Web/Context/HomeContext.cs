@@ -6,16 +6,11 @@ namespace ETrade.Context
 	//ShopContext bu kısmı içeriyor.!!!!!
 	public  class HomeContext : DbContext
 	{
-
 		private IConfiguration Configuration { get; }
 		public HomeContext(DbContextOptions<HomeContext> options, IConfiguration configuration) : base(options)
 		{
 			Configuration = configuration;
 		}
-
-        public HomeContext()
-        {
-        }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		{
@@ -64,8 +59,6 @@ namespace ETrade.Context
 				.HasOne(pt => pt.topic)
 				.WithMany(p => p.announcementTopics)
 				.HasForeignKey(pt => pt.TopicId);
-
-
 		}
 	}
 }
