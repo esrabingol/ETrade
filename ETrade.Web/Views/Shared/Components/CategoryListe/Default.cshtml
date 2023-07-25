@@ -1,0 +1,8 @@
+﻿@model List<Category>
+
+	@foreach( var category in Model)
+{
+	<p>
+		<a asp-controller="Home" asp-action="@category.URL"> @category.CategoryName </a>
+	</p>
+}

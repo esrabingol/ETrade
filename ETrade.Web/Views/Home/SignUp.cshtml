@@ -1,0 +1,136 @@
+﻿
+
+<!DOCTYPE html>
+<html lang="tr">
+<a href="@Url.Action("Index", "Home")">
+    <img src="~/login/images/icons/favicon.ico" alt="Favicon" width="27" height="27">
+</a>
+
+<head>
+    <!-- Required meta tags-->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Colorlib Templates">
+    <meta name="author" content="Colorlib">
+    <meta name="keywords" content="Colorlib Templates">
+
+    <!-- Title Page-->
+    <title>Register Page</title> 
+
+    <!-- Icons font CSS-->
+	<link href="~/signup/vendor/mdi-font/css/material-design-iconic-font.min.css" rel="stylesheet" />
+	<link href="~/signup/vendor/font-awesome-4.7/css/font-awesome.min.css" rel="stylesheet" />
+    <!-- Font special for pages-->
+    <link href="https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+
+    <!-- Vendor CSS-->
+	<link href="~/signup/vendor/select2/select2.min.css" rel="stylesheet" />
+	<link href="~/signup/vendor/datepicker/daterangepicker.css" rel="stylesheet" />
+
+    <!-- Main CSS-->
+	<link href="~/signup/css/main.css" rel="stylesheet" />
+	<link href="~/login/css/util.css" rel="stylesheet" />
+	<link href="~/login/css/main.css" rel="stylesheet" />
+</head>
+<style>
+   .wrapper wrapper--w680
+   {
+       background-color: white;
+   }
+</style>
+<body>
+    <div class="page-wrapper  "
+        style="background:white";">
+        <div class="wrapper wrapper--w680">
+            <div class="card card-4">
+                <div class="card-body">
+					<h2 class="title"><strong>Kayıt Formu</strong></h2>
+                    <form method="POST">
+                        <div class="row row-space">
+                            <div class="col-2">
+                                <div class="input-group">
+                                    <label class="label">İsim</label>
+                                    <input class="input--style-4" type="text" name="first_name">
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <div class="input-group">
+                                    <label class="label">Soyisim</label>
+                                    <input class="input--style-4" type="text" name="last_name">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row row-space">
+                            <div class="col-2">
+                                <div class="input-group">
+                                    <label class="label">Doğum Günü</label>
+                                    <div class="input-group-icon">
+                                        <input class="input--style-4 js-datepicker" type="text" name="birthday">
+                                        <i class="zmdi zmdi-calendar-note input-icon js-btn-calendar"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <div class="input-group">
+                                    <label class="label">Cinsiyet</label>
+                                    <div class="p-t-10">
+                                        <label class="radio-container m-r-45">
+                                            Kadın
+                                            <input type="radio" checked="checked" name="gender">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                        <label class="radio-container">
+                                            Erkek
+                                            <input type="radio" name="gender">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row row-space">
+                            <div class="col-2">
+                                <div class="input-group">
+                                    <label class="label">Mail</label>
+                                    <input class="input--style-4" type="email" name="email">
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <div class="input-group">
+                                    <label class="label">Telefon Numarası</label>
+                                    <input class="input--style-4" type="text" name="phone">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="container-login100-form-btn">
+                            <div class="wrap-login100-form-btn">
+                                <div class="login100-form-bgbtn"></div>
+                                <button class="login100-form-btn">
+                                   KAYDOL
+                                </button>
+                            </div>
+                        </div>
+                        <div class="p-t-15">
+                            <a href="@Url.Action("Login", "Home")"/> Giriş Yap Ekranına Dön </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Jquery JS-->
+	<script src="~/signup/vendor/jquery/jquery.min.js"></script>
+    <!-- Vendor JS-->
+	<script src="~/signup/vendor/select2/select2.min.js"></script>
+	<script src="~/signup/vendor/datepicker/moment.min.js"></script>
+	<script src="~/signup/vendor/datepicker/daterangepicker.js"></script>
+
+    <!-- Main JS-->
+	<script src="~/signup/js/global.js"></script>
+
+</body>
+
+</html>
+<!-- end document-->
