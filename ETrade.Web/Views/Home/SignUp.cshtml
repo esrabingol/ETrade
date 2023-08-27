@@ -1,4 +1,10 @@
-﻿
+﻿@using ETrade.Web.Models;
+@model SignUpModel
+@addTagHelper *,Microsoft.ASPNetCore.Mvc.TagHelpers
+
+@{
+    ViewData["Title"] = "SignUp";
+}
 
 <!DOCTYPE html>
 <html lang="tr">
@@ -15,7 +21,7 @@
     <meta name="keywords" content="Colorlib Templates">
 
     <!-- Title Page-->
-    <title>Register Page</title> 
+    <title>SignUp Page</title> 
 
     <!-- Icons font CSS-->
 	<link href="~/signup/vendor/mdi-font/css/material-design-iconic-font.min.css" rel="stylesheet" />
@@ -33,75 +39,91 @@
 	<link href="~/login/css/main.css" rel="stylesheet" />
 </head>
 <style>
-   .wrapper wrapper--w680
+ 
+   .wrapper
    {
        background-color: white;
+            margin: 35px auto;
    }
+
+    .field-validation-error {
+        color: red;
+        font-size: 12px;
+    }
 </style>
 <body>
+
     <div class="page-wrapper  "
         style="background:white";">
         <div class="wrapper wrapper--w680">
             <div class="card card-4">
                 <div class="card-body">
 					<h2 class="title"><strong>Kayıt Formu</strong></h2>
-                    <form method="POST">
+                    <form class="login100-form validate-form" asp-controller="Home" asp-action="SignUp" method="post">
+                        <label asp-validation-summary="All" class="text-danger"></label>
+
+
                         <div class="row row-space">
                             <div class="col-2">
-                                <div class="input-group">
-                                    <label class="label">İsim</label>
-                                    <input class="input--style-4" type="text" name="first_name">
-                                </div>
-                            </div>
-                            <div class="col-2">
-                                <div class="input-group">
-                                    <label class="label">Soyisim</label>
-                                    <input class="input--style-4" type="text" name="last_name">
-                                </div>
+                        <div class="wrap-input100 validate-input m-b-23">
+
+                            <label asp-for="FirstName" class="label-input100">İsim  </label>
+                            <div class="input-100">
+                                <input asp-for="FirstName" value="@Model.FirstName" class="form-control" />
+                                <span asp-validation-for="FirstName" class="text-danger"> </span>
                             </div>
                         </div>
+                        </div>
+
+
+                            <div class="col-2">
+                        <div class="wrap-input100 validate-input m-b-23">
+                            <label asp-for="Last_Name" class="label-input100">Soyisim  </label>
+                            <div class="input-100">
+                                <input asp-for="Last_Name" value="@Model.Last_Name" class="form-control" />
+                                <span asp-validation-for="Last_Name" class="text-danger"> </span>
+                            </div>
+                        </div>
+                        </div>
+                        </div>
+
+
+
                         <div class="row row-space">
                             <div class="col-2">
-                                <div class="input-group">
-                                    <label class="label">Doğum Günü</label>
-                                    <div class="input-group-icon">
-                                        <input class="input--style-4 js-datepicker" type="text" name="birthday">
-                                        <i class="zmdi zmdi-calendar-note input-icon js-btn-calendar"></i>
+                                <div class="wrap-input100 validate-input m-b-23">
+
+                                    <label asp-for="Email" class="label-input100">Mail Adres  </label>
+                                    <div class="input-100">
+                                        <input asp-for="Email" value="@Model.Email" class="form-control" />
+                                        <span asp-validation-for="Email" class="text-danger"> </span>
                                     </div>
                                 </div>
                             </div>
+
+
                             <div class="col-2">
-                                <div class="input-group">
-                                    <label class="label">Cinsiyet</label>
-                                    <div class="p-t-10">
-                                        <label class="radio-container m-r-45">
-                                            Kadın
-                                            <input type="radio" checked="checked" name="gender">
-                                            <span class="checkmark"></span>
-                                        </label>
-                                        <label class="radio-container">
-                                            Erkek
-                                            <input type="radio" name="gender">
-                                            <span class="checkmark"></span>
-                                        </label>
+                                <div class="wrap-input100 validate-input m-b-23">
+                                    <label asp-for="Phone" class="label-input100">Telefon Numarası </label>
+                                    <div class="input-100">
+                                        <input asp-for="Phone" value="@Model.Phone" class="form-control" />
+                                        <span asp-validation-for="Phone" class="text-danger"> </span>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="row row-space">
-                            <div class="col-2">
-                                <div class="input-group">
-                                    <label class="label">Mail</label>
-                                    <input class="input--style-4" type="email" name="email">
+
+                         
+                                <div class="wrap-input100 validate-input m-b-23">
+
+                                    <label asp-for="Password" class="label-input100">Şifre  </label>
+                                    <div class="input-100">
+                                        <input asp-for="Password" value="@Model.Password" class="form-control" />
+                                        <span asp-validation-for="Password" class="text-danger"> </span>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-2">
-                                <div class="input-group">
-                                    <label class="label">Telefon Numarası</label>
-                                    <input class="input--style-4" type="text" name="phone">
-                                </div>
-                            </div>
-                        </div>
+                            
+
 
                         <div class="container-login100-form-btn">
                             <div class="wrap-login100-form-btn">

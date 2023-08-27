@@ -1,6 +1,8 @@
 ﻿using ETrade.Abstract;
 using ETrade.Context;
 using ETrade.Entities;
+using System;
+using System.Collections.Generic;
 using System.Linq.Expressions;
 
 namespace ETrade.Concrete.EntityFraemwork

@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿@using ETrade.Web.Models
+@model LoginModel
+
+
+<!DOCTYPE html>
 <html lang="tr">
 <head>
 	<title>Login Page</title>
@@ -37,27 +41,34 @@
 	<div class="limiter">
 		<div class="container-login100" style=" "<img src="~/login/images/bg-01.jpg" /> 
 			<div class="wrap-login100 p-l-55 p-r-55 p-t-65 p-b-54">
-				<form class="login100-form validate-form">
+				<form class="login100-form validate-form"  asp-controller="Home" asp-action="Login" method="post">
 					<span class="login100-form-title p-b-49">
 						Giriş Yap
 					</span>
 
-					<div class="wrap-input100 validate-input m-b-23" data-validate = "Username is reauired">
-						<span class="label-input100">Kullanıcı Adı</span>
-						<input class="input100" type="text" name="username" placeholder="Kullanıcı adı giriniz.">
-						<span class="focus-input100" data-symbol="&#xf206;"></span>
-					</div>
+					
+				<div class="wrap-input100 validate-input m-b-23">
 
-					<div class="wrap-input100 validate-input" data-validate="Password is required">
-						<span class="label-input100">Şifre</span>
-						<input class="input100" type="password" name="pass" placeholder="Şifre Giriniz.">
-						<span class="focus-input100" data-symbol="&#xf190;"></span>
-					</div>
+				<label asp-for="FirstName" class="label-input100">Kullancı Adı : </label>
+				<div class="input-100">
+					<input asp-for="FirstName" value="@Model.FirstName" class="form-control" />
+							<span asp-validation-for="FirstName" class="text-danger"> </span>
+				</div>
+		</div>
+
+					<div class=class="wrap-input100 validate-input m-b-23">
+
+						<label asp-for="Password" class="label-input100"> Şifre :</label>
+						<div class="input-100">
+							<input asp-for="Password" value="@Model.Password" class="form-control" />
+								<span asp-validation-for="Password" class="text-danger"> </span>
+
+						</div>
+						</div>
+
 
 					<div class="text-right p-t-8 p-b-31">
-						<a href="#"> <!--şifremi unuttum yönlendirme ekranı-->
-							Şifremi unuttum?
-						</a>
+						 <a href="@Url.Action("ResetPassword", "Home")"/> Şifremi Unuttum? </a>
 					</div>
 
 					<div class="container-login100-form-btn">
@@ -114,6 +125,7 @@
 	<script src="~/login/vendor/countdowntime/countdowntime.js"></script>
 <!--===============================================================================================-->
 	<script src="~/login/js/main.js"></script>
+
 
 </body>
 </html>

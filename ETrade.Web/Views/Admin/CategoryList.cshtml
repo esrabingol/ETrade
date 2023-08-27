@@ -1,0 +1,57 @@
+﻿@*@using ETrade.Web.Models;
+@model CategoryListModel
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>CategoryList</title>
+</head>
+<body>
+    @if (Model.Categories.Count() > 0)
+    {
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <td style="width: 80px;">Ürün Id</td>
+                    <td style="width: 750px;">Ürün Adı</td>
+                    <td style= "width: 150 px;"></td>
+
+                </tr>
+            </thead>
+            <tbody>
+                <h1>Ürün Düzenle</h1>
+                @foreach (var item in Model.Categories)
+                {
+                    <tr>
+                        <td>@item.Id</td>
+                        <td>@item.Name</td>
+                        <td>
+                            <a class="btn btn-primary btn-sm mr-2" href="/Admin/EditProduct/@item.Id">Düzenle</a>
+
+                            <form action="~/Admin/DeleteProduct" method="post" style="display:inline;">
+                                <input type="hidden" name="ProductId" value="@item.Id" />
+                                <button type="submit" class="btn btn-danger btn-sm ">Sil</button>
+                            </form>
+
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+
+        </table>
+    }
+    else
+    {
+        <div class="alert alert-warning">
+            <h4>Ürün Yok </h4>
+        </div>
+    }
+</body>
+</html>
+*@

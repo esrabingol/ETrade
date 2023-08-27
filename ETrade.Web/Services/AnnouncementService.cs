@@ -1,5 +1,7 @@
 ﻿using ETrade.Abstract;
 using ETrade.Entities;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ETrade.Services
 {

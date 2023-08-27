@@ -2,6 +2,8 @@
 <html lang="tr">
 <html>
     <head>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Sofia">
+
     <meta name='viewport' content='width=device-width, initial-scale=1'>
     <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
     <!--Get your own code at fontawesome.com-->
@@ -22,13 +24,17 @@
       <title>Bootstrap Example</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
 
     </head>
     <style>
-
+ .navbar-right {
+        float: right !important;
+        margin-right: -312px;
+    }
     .nav-item {
         display: flex;
         justify-content: space-between;
@@ -64,16 +70,38 @@
 
 <body>
 
-
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <div class="container-fluid">
     <div class="navbar-header">
-      <a class="navbar-brand" href="@Url.Action("Index","Home") " style="font-size:24px; font-weight: bold;">E-Commercial</a>
-    </div>
-    <ul class="nav navbar-nav">
-   <li class="active"><a href="@Url.Action("Products","Home")" style="font-size: 20px;" >Yeni Ürünler</a </li>
-      </li>
-      </li>
+
+                <a class="navbar-brand" href="@Url.Action("Index","Home") " style="font-family: 'Sofia', sans-serif; font-size:24px; font-weight: bold;margin-left: -360px;">E-Commercial</a>
+                <ul class="nav navbar-nav">
+                    <li class="active">
+                        <a href="@Url.Action("Categories","Home")" style="font-size: 18px;">Tüm Ürünler</a>
+                    </li>
+
+                    <li class="active">
+                        <a href="@Url.Action("CreateProduct","Admin")" style="font-size: 18px;">Ürün Ekle</a>
+
+                    </li>
+                    <li>
+                        <a href="@Url.Action("Index","Admin")" style="font-size: 18px;">Ürün Düzenle</a>
+                    </li>
+                @*@if (User.Identity.IsAuthenticated)
+
+                {
+                    <li class="active">
+                        <a href="@Url.Action("CreateProduct","Admin")" style="font-size: 18px;">Ürün Ekle</a>
+
+                    </li>
+                    <li>
+                        <a href="@Url.Action("Index","Admin")" style="font-size: 18px;">Ürün Düzenle</a>
+                    </li>
+
+
+                }*@
+
+      
     </ul>
         <form class="navbar-form navbar-left" action="/action_page.php">
       <div class="form-group" >
@@ -85,14 +113,35 @@
         </a>
       </p></button>
     </form>
+  <nav class="navbar">
     <ul class="nav navbar-nav navbar-right" style="font-size :15px;">
-       <li><a href="#"><span class="glyphicon glyphicon-bell"></span> </a></li>
-       <li><a href="@Url.Action("Favorites","Home")"><span class="glyphicon glyphicon-heart"></span></a></li>
-       <li><a href="@Url.Action("Basket","Home")"><span class="glyphicon glyphicon-shopping-cart"></span></a></li>
-       <li><a href="@Url.Action("SignUp","Home")"><span class="glyphicon glyphicon-user"></span></a></li>
-       <li><a href="@Url.Action("Login","Home")"><span class="glyphicon glyphicon-log-in" ></span></a></li>
+
+                        @if (User.Identity.IsAuthenticated)
+
+                        {
+                            <li><a href="@Url.Action("Manage","Home")"> @User.Identity.Name  </a></li>
+
+                            <li><a href="#"><span class="glyphicon glyphicon-bell"></span> </a></li>
+
+                            <li><a href="@Url.Action("Logout","Home")"><span class="glyphicon glyphicon-log-out"></span></a></li>
+                        }
+                        else
+                        {
+                           
+                            <li><a href="@Url.Action("Favorites","Home")"><span class="glyphicon glyphicon-heart"></span></a></li>
+                            <li><a href="@Url.Action("Basket","Home")"><span class="glyphicon glyphicon-shopping-cart"></span></a></li>
+                            <li><a href="@Url.Action("SignUp","Home")"><span class="glyphicon glyphicon-user"></span></a></li>
+                            <li><a href="@Url.Action("Login","Home")"><span class="glyphicon glyphicon-log-in"></span></a></li>
+                        }
+
+
+       
+      
+                   
+                  
   </div>
 </nav>
+ 
 
     <!--slider section-->
     <div id="demo" class="carousel slide" data-ride="carousel">
@@ -150,7 +199,7 @@
     <section class="detail_section">
         <div class="container-fluid">
             <div class="row">
-                <div class="col-lg-3"  >
+                <div class="col-lg-3" style="max-width: 21%">
                    
                 </div>
                 <div class=" col-lg-7">

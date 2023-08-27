@@ -9,10 +9,10 @@ namespace ETrade.Abstract
     public interface ICategoryService
     {
         List<Category> categories();
+        //List<Category> GetAll();
         void Create(Category entity);
         void Update(Category entity);
         void Delete(Category entity);
-
-
+        List<Category> GetAll();
     }
 }

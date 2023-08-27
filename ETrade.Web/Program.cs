@@ -3,49 +3,70 @@ using ETrade.Concrete.EntityFraemwork;
 using ETrade.Concrete.Manager;
 using ETrade.Context;
 using ETrade.Services;
+using ETrade.Web.Abstract;
+using ETrade.Web.Concrete.EntityFraemwork;
+using ETrade.Web.Concrete.Manager;
+using ETrade.Web.Entities;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using System;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+//HomeContext'te verileri saklamasýný istiyorum.
 builder.Services.AddDbContext<HomeContext>(options =>
 {
     options.UseSqlServer("DefaultConnection");
 });
 
+builder.Services.AddIdentity<ApplicationUser, Role>()
+   .AddEntityFrameworkStores<HomeContext>();
+
+builder.Services.Configure<IdentityOptions>(options =>
+{
+    options.Lockout.MaxFailedAccessAttempts = 5;
+    options.Lockout.DefaultLockoutTimeSpan= TimeSpan.FromMinutes(2);
+    options.Lockout.AllowedForNewUsers= true;
+    options.User.RequireUniqueEmail= true;
+});
 
 builder.Services.AddScoped<IAnnouncementRepository, EfCoreAnnouncementRepository>();
-builder.Services.AddScoped<IAnnouncementService, AnnouncementService>();
 
 builder.Services.AddScoped<IProductRepository, EfCoreProductRepository>(); // MemoryProduct üzerinden gelen ile ayný altyapýya sahip
+
+builder.Services.AddScoped<ICartRepository, EfCoreCartRepository>();
+
+builder.Services.AddScoped<IAnnouncementService, AnnouncementService>();
+
 builder.Services.AddScoped<IProductService, ProductManager>();
 
-//SeedDatabase.Seed();
+builder.Services.AddScoped<ICartService,CartManager>();
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
+    app.UseDeveloperExceptionPage();
 }
 
 app.UseHttpsRedirection();
 
 app.UseStaticFiles();
 
-app.UseRouting();
+app.UseAuthentication();//kullanýcý doðrulamak için kullanýlýr.
 
-app.UseAuthorization();
+app.UseAuthorization();//yetki,izin
+
+app.UseRouting();
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
-
-//deneme commit

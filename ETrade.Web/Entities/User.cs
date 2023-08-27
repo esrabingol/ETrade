@@ -1,9 +1,13 @@
 ﻿using ETrade.Abstract;
+using System;
+using System.Collections.Generic;
 
 namespace ETrade.Entities
 {
-	public class User : IEntity  //has dbset table
+	//User(kullanıcı) verilerini,parola vs.
+	public class User : IEntity  //has dbset table, bu kısım PERSONEL
 	{
+		
 		public int UserId { get; set; }
 		public string Username { get; set; }
 		public string Password { get; set; }

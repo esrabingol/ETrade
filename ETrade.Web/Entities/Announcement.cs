@@ -1,4 +1,5 @@
 ﻿using ETrade.Abstract;
+using System.Collections.Generic;
 
 namespace ETrade.Entities
 {
