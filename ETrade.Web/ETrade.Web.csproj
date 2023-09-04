@@ -22,12 +22,13 @@
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="6.0.0" />
-		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.0" />
+		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.16" />
 		<PackageReference Include="System.Linq.Queryable" Version="4.3.0" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<Folder Include="wwwroot\img\" />
+		<Folder Include="wwwroot\AllCategories\" />
 	</ItemGroup>
 
 </Project>

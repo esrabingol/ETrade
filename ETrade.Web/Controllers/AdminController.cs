@@ -30,7 +30,7 @@ namespace ETrade.Controllers
                 Products = _productService.GetAll()
 
             });
-		}
+        }
 
         [HttpGet]
         public IActionResult CreateProduct() 
@@ -74,7 +74,7 @@ namespace ETrade.Controllers
                 return View(model);
             
         }
-           public IActionResult EditProduct(int? id) //id'ye uygun bilgi form ekranına gönderilir
+        public IActionResult EditProduct(int? id) //id'ye uygun bilgi form ekranına gönderilir
         {
             if(id== null) //id yok ise hata mesajı
             {
@@ -160,11 +160,15 @@ namespace ETrade.Controllers
             if(entity != null) // db de uygun bir id ile eşleşmesi durumu
             {   
                 _productService.Delete(entity);
+            
+
             }
             return RedirectToAction("Index");
            
         }
 
+
+      
         //public IActionResult CategoryList() //Ürüne uygun kategori
         //{
         //    return View(new CategoryListModel()

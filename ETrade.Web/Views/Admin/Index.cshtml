@@ -60,7 +60,7 @@
             </div>
             <ul class="nav navbar-nav">
             </ul>
-            <form class="navbar-form navbar-left" action="/action_page.php">
+ @*           <form class="navbar-form navbar-left" action="/action_page.php">
                 <div class="form-group">
                     <input type="text" class="form-control" placeholder="Search" name="search">
                 </div>
@@ -71,12 +71,12 @@
                         </a>
                     </p>
                 </button>
-            </form>
+            </form>*@
             <nav class="navbar">
                 <ul class="nav navbar-nav navbar-right" style="font-size :15px;">
-                    <li><a href="#"><span class="glyphicon glyphicon-bell"></span> </a></li>
+@*                    <li><a href="#"><span class="glyphicon glyphicon-bell"></span> </a></li>
                     <li><a href="@Url.Action("Favorites","Home")"><span class="glyphicon glyphicon-heart"></span></a></li>
-                    <li><a href="@Url.Action("Basket","Home")"><span class="glyphicon glyphicon-shopping-cart"></span></a></li>
+                    <li><a href="@Url.Action("Basket","Home")"><span class="glyphicon glyphicon-shopping-cart"></span></a></li>*@
                     <li><a href="@Url.Action("SignUp","Home")"><span class="glyphicon glyphicon-user"></span></a></li>
                     <li><a href="@Url.Action("Login","Home")"><span class="glyphicon glyphicon-log-in"></span></a></li>
         </div>
@@ -96,6 +96,9 @@
         </thead>
         <tbody>
                 <h1>Ürün Düzenle</h1>
+
+          
+
             @foreach (var item in Model.Products)
             {
                 <tr>
@@ -120,7 +123,9 @@
                                 <input type="hidden" name="ProductId" value="@item.ProductId" />
                                 <button type="submit" class="btn btn-danger btn-sm"
                                 onclick="return confirm('Bu ürünü silmek istediğinize emin misiniz?')"> Sil </button>
+                              
                         </form>
+                           
           
                     </td>
                 </tr>

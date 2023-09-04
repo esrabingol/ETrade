@@ -8,10 +8,10 @@ namespace ETrade.Web.Abstract
 {
     public interface ICartService
     {
-        void InitializeCart(string userId);
-        Cart GetCartByUserId(string userId);
+        void InitializeCart(int Id); //bizim için bir asnetusersdaki Id
+        Cart GetCartByUserId(int Id); //kullanıcı login olunca bize gelicek
 
-        void AddToCart(string userId, int productId, int quantity);
-		void DeleteBasket(string userId, int productId);
+        void AddToCart(int Id, int productId, int quantity);
+		void DeleteBasket(int Id, int productId);
 	}
 }

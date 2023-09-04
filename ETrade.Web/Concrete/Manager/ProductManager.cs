@@ -4,6 +4,7 @@ using ETrade.Context;
 using ETrade.Entities;
 using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Text;
 
 namespace ETrade.Concrete.Manager
@@ -44,10 +45,11 @@ namespace ETrade.Concrete.Manager
         {
             return _productRepository.GetAll(p => p.ProductPrice > 2000); 
         }
-
         public void Update(Product entity)
         {
              _productRepository.Update(entity);
         }
+
+  
     }
 }

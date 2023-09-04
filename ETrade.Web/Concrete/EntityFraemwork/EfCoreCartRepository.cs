@@ -22,11 +22,11 @@ namespace ETrade.Web.Concrete.EntityFraemwork
                 _context.SaveChanges();            
 		}
 
-		public Cart GetByUserId(string userId)
+		public Cart GetByUserId(int Id)
         {
             return _context.Carts
                .Include("cartItems.Product")
-                .FirstOrDefault(c => c.UserId == userId);
+                .FirstOrDefault(c => c.Id == Id);
         }
 
 		public void DeleteFromCart(int cartId, int productId)

@@ -5,12 +5,15 @@ using ETrade.Models;
 using ETrade.Web.Abstract;
 using ETrade.Web.Entities;
 using ETrade.Web.Models;
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.Scripting;
 using System;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 
 namespace ETrade.Controllers
@@ -34,9 +37,9 @@ namespace ETrade.Controllers
 
         }
 
-        public IActionResult Index()
+        public IActionResult Index(string message = null)
         {
-
+            ViewBag.Message = message;
             return View();
         }
         public IActionResult Details(int? id) //ürün detay kısmını ekrana yansıtmak
@@ -63,16 +66,17 @@ namespace ETrade.Controllers
         }
         public IActionResult Categories()
         {
+
+            
             // HomeController bize ProductListModel döndürüyor
             return View(new ProductListModel()
             { //productlistmodel ile tüm kategorileri listelememi sağlıyıcam
                 Products = _productService.GetAll()
             });
 
+
         }
-
-
-        public IActionResult LivingRoom()
+        public IActionResult LivingRoom(int page = 1)
         {
 
 
@@ -81,50 +85,75 @@ namespace ETrade.Controllers
             var LProducts = allProducts.Where(p => p.ProductCategory.Contains("Mobilya", StringComparison.OrdinalIgnoreCase)
             || p.ProductCategory.Contains("Ev", StringComparison.OrdinalIgnoreCase)).ToList();
 
+            int pageSize = 3; // Her sayfada gösterilecek ürün sayısı
+       
+
             var model = new ProductListModel()
             {
-                Products = LProducts
+                Products = LProducts.Skip((page - 1) * pageSize)
+                                .Take(pageSize)
+                                .ToList(),
+                PageNumber = page,
+                TotalPages = (int)Math.Ceiling((double)LProducts.Count / pageSize)
             };
 
             return View(model);
         }
-        public IActionResult BathRoom()
+        public IActionResult BathRoom(int page =1)
         {
-            //pembe
+            
             var allProducts = _productService.GetAll(); // Tüm ürünleri al
 
             var BProducts = allProducts.Where(p => p.ProductCategory.Contains("Banyo", StringComparison.OrdinalIgnoreCase)).ToList();
 
+            int pageSize = 3;
             var model = new ProductListModel()
             {
-                Products = BProducts
+                Products = BProducts.Skip((page-1)*pageSize)
+                .Take(pageSize)
+                .ToList(),
+                PageNumber = page,
+                TotalPages= (int)Math.Ceiling((double)BProducts.Count/ pageSize)
             };
 
             return View(model);
 
         }
-        public IActionResult BedRoom()
+        public IActionResult BedRoom(int page =1)
         {
             var allProducts = _productService.GetAll();
 
             var BProducts = allProducts.Where(p => p.ProductCategory.Contains("Yatak Odası", StringComparison.OrdinalIgnoreCase)).ToList();
 
+            int pageSize = 3;
             var model = new ProductListModel()
             {
-                Products = BProducts
+                Products = BProducts.Skip((page-1)*pageSize)
+                .Take(pageSize)
+                .ToList(),
+                PageNumber=page,
+                TotalPages= (int)Math.Ceiling((double) BProducts.Count/pageSize)
             };
 
             return View(model);
         }
 
-        public IActionResult Kitchen()
+        public IActionResult Kitchen(int page = 1)
         {
             var allProducts = _productService.GetAll();
             var KProducts = allProducts.Where(p => p.ProductCategory.Contains("Mutfak", StringComparison.OrdinalIgnoreCase)).ToList();
+
+            int pageSize = 3; // Her sayfada gösterilecek ürün sayısı
+
             var model = new ProductListModel()
             {
-                Products = KProducts
+                Products = KProducts.Skip((page - 1) * pageSize)
+                                .Take(pageSize)
+                                .ToList(),
+                PageNumber = page,
+                TotalPages = (int)Math.Ceiling((double)KProducts.Count / pageSize)
             };
+
             return View(model);
         }
 
@@ -132,6 +161,7 @@ namespace ETrade.Controllers
         {
             return View();
         }
+
 
         [HttpGet]
         public IActionResult SignUp() //Register
@@ -141,7 +171,6 @@ namespace ETrade.Controllers
 
 
         [HttpPost]
-        //[ValidateAntiForgeryToken] //security
         public async Task<IActionResult> SignUp(SignUpModel model)
         { 
             if (!ModelState.IsValid)
@@ -150,17 +179,20 @@ namespace ETrade.Controllers
             }
             var user = new ApplicationUser //SignUpModeldeki tüm alanlar kullanılıyor.
             {
+                
                 Name = model.FirstName,
                 LastName = model.Last_Name,
                 Email = model.Email,
                 PhoneNumber = model.Phone,
-
+                UserName =model.Email,
+                Password = model.Password
+               
             };
             var result = await _userManager.CreateAsync(user, model.Password); // Veritabanına gönder
 
-            if (!result.Succeeded && result.Errors != null && !result.Errors.Any())
+            if (!result.Succeeded)
             {
-                //loginde hata alırsa hatayu alıp ekrana bastık
+                //loginde hata alırsa hatayı alıp ekrana bastık
                 foreach (var item in result.Errors)
                 {
                     ModelState.AddModelError("", item.Description);
@@ -169,13 +201,22 @@ namespace ETrade.Controllers
                 return View(model);
             }
 
-            // Kullanıcı başarıyla oluşturuldu, bir role atanabilir:
-            await _userManager.AddToRoleAsync(user, "User");
-            // Kullanıcıyı oturum açtırabilirsiniz (isteğe bağlı):
-            await _signInManager.SignInAsync(user, isPersistent: false);
+            if(result.Succeeded)
+            {
+               
+                // Kullanıcıyı oturum açtırabilirsiniz (isteğe bağlı):
+                await _signInManager.SignInAsync(user, isPersistent: false); //kullanıcı bilgileri doğruca geliyor
+
+                // Başarılı kayıt uyarısı ekleyin
+                TempData["SuccessMessage"] = "Kaydınız başarıyla oluşturuldu! Lütfen giriş yapın.";
+
+                return RedirectToAction("Login", "Home");
+             
+            }
 
             return RedirectToAction("Login");
         }
+
 
         [HttpGet]
         public IActionResult Login()
@@ -194,71 +235,113 @@ namespace ETrade.Controllers
 
             if (user == null)
             {
-                ModelState.AddModelError("", "Bu kullanıcı ile daha önce hesap oluşturulmamış");
-                return View(model);
+				TempData["ErrorMessage"] = "Mevcut Hesap Bulunamadı! Bilgilerinizi Kontrol Ediniz.";
+				return View(model);
             }
             var result = await _signInManager.PasswordSignInAsync(model.FirstName, model.Password, false, false);
 
             if (result.Succeeded)
             {
-                return RedirectToAction("Home", "Index");
+                _cartService.InitializeCart(user.Id);
+          
+                return RedirectToAction("Index", "Home");
             }
+            else
+            {
+				TempData["ErrorMessage"] = "Kullancı Adı veya Parola Yanlış!";
+			}
 
-            ModelState.AddModelError("", "Kullanıcı adı veya parola yanlış");
+            
             return View(model);
         }
 
         public async Task<ActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
-            return RedirectToAction("Index", "Home");
+            TempData["Message"] = "Çıkış yapıldı! Devam etmek için giriş yapınız..";
+            return RedirectToAction("Index", "Home", new { message = TempData["Message"] });
 
         }
 
+
         public IActionResult ForgotPassword()
         {
+
             return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> ForgotPassword(string Email)
+        public async Task<IActionResult> ForgotPassword(ForgotPasswordModel model)
         {
-            //if(string.IsNullOrEmpty(Email))
-            //   {
-            //	return View();
-            //}
+            if (ModelState.IsValid) // Model geçerli mi kontrolü yapılıyor
+            {
+                var user = await _userManager.FindByEmailAsync(model.Email);
 
-            //var user = await _userManager.FindByEmailAsync(Email);
+                if (user != null)
+                {
+                    var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+                    var result = await _userManager.ResetPasswordAsync(user, token, model.NewPassword);
 
-            //if(user == null)
-            //{
-            //	return View();
-            //}
+                    if (result.Succeeded)
+                    {
+                        // Veritabanındaki şifreyi güncelle
+   
+                        var newPasswordHash = _userManager.PasswordHasher.HashPassword(user, model.NewPassword);
+                        user.PasswordHash = newPasswordHash;
+                        var updateResult = await _userManager.UpdateAsync(user);
 
-            //var code = await _userManager.GeneratePasswordResetTokenAsync(user);
-            //var callback = Url.Action("ResetPassword", "Home", new
-            //{
-            //	UserId = user.Id,
-            //	token=code
-            //});
 
-            ////send email kısmını eklemedim 
-            return View();
+
+                        if (updateResult.Succeeded)
+                        {
+                            // Kullanıcıyı oturumdan çıkar
+                            await _signInManager.SignOutAsync();
+
+                            // Kullanıcıyı giriş sayfasına yönlendir
+                            return RedirectToAction("Login", "Home");
+                        }
+                        else
+                        {
+                            foreach (var error in updateResult.Errors)
+                            {
+                                ModelState.AddModelError("", error.Description);
+                            }
+                        }
+
+                    }
+                    else
+                    {
+                        foreach (var error in result.Errors)
+                        {
+                            ModelState.AddModelError("", error.Description);
+                        }
+                    }
+                }
+
+                else
+                {
+                    TempData["ErrorMessage"] = "Mail Adresiniz Sistemde Kayıtlı Değil! Tekrar Deneyiniz.";
+                    return View(model);
+                }
+
+            }
+
+            return View(model);
+
         }
 
-        public IActionResult ResetPassword()
-        {
-            return View();
-        }
+
+
         public IActionResult Basket()
 
         {
 
-            var cart = _cartService.GetCartByUserId(_userManager.GetUserId(User));
+            var userId = int.Parse(_userManager.GetUserId(User)); // String'i int'e dönüştür
+            var cart = _cartService.GetCartByUserId(userId);
 
             if (cart == null)
             {
-                cart = _cartService.GetCartByUserId(_userManager.GetUserId(User));//Eğer sepet yoksa oluşturabilirsiniz
+                cart = _cartService.GetCartByUserId(userId);
             }
             return View(new CartModel()
             {
@@ -282,8 +365,7 @@ namespace ETrade.Controllers
         [HttpPost]
         public IActionResult DeleteBasket(int productId)
         {
-            _cartService.DeleteBasket(_userManager.GetUserId(User), productId);
-            return RedirectToAction("Basket", "Home");
+            return View();
         }
 
 
@@ -306,8 +388,12 @@ namespace ETrade.Controllers
             return RedirectToAction("Basket");
         }
 
+
+
+
     }
 }
+
 
 
 

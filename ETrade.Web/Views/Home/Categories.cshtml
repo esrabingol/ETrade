@@ -40,6 +40,22 @@
 </head>
 
 <style>
+    /*pagination */
+    .pagination {
+        text-align: center;
+        padding-left: 495px;
+    }
+
+        .pagination .page-item .page-link {
+            font-size: 15px; /* Düğme yazı boyutunu ayarlayın */
+            padding: 10px 15px; /* Düğme kenar boşluğunu ayarlayın */
+        }
+
+        .pagination .page-item.active .page-link {
+            background-color: #007bff; /* Aktif sayfa düğmesi arkaplan rengi */
+            color: #fff; /* Aktif sayfa düğmesi metin rengi */
+        }
+    /*paginationend*/
     .navbar-brand {
         margin-left: -445px;
     }
@@ -73,7 +89,7 @@
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
             <div class="navbar-header">
-                <a class="navbar-brand" href="@Url.Action("Index","Home") " style="font-family: 'Sofia', sans-serif; font-size:24px; font-weight: bold;margin-left: -210px;">E-Commercial</a>
+                <a class="navbar-brand" href="@Url.Action("Index","Home") " style="font-family: 'Sofia', sans-serif; font-size:24px; font-weight: bold;margin-left: -160px;">E-Commercial</a>
                
             </div>
             <ul class="nav navbar-nav">
@@ -90,6 +106,8 @@
                     </p>
                 </button>
             </form>
+
+
             <nav class="navbar">
                 <ul class="nav navbar-nav navbar-right" style="font-size :15px;">
                     @if (User.Identity.IsAuthenticated)
@@ -104,6 +122,8 @@
                     }
                     else
                     {
+                        <li><a href="@Url.Action("Login","Home")"><span class="glyphicon glyphicon-heart"></span></a></li>
+                        <li><a href="@Url.Action("Login","Home")"><span class="glyphicon glyphicon-shopping-cart"></span></a></li>
                         <li><a href="@Url.Action("SignUp","Home")"><span class="glyphicon glyphicon-user"></span></a></li>
                         <li><a href="@Url.Action("Login","Home")"><span class="glyphicon glyphicon-log-in"></span></a></li>
                     }
@@ -150,6 +170,46 @@
    </div>
    </div>
 
+    <!--pagination-->
+    <nav aria-label="Page navigation example">
+        <ul class="pagination">
+            @if (Model.PageNumber > 1)
+            {
+                <li class="page-item">
+                    <a class="page-link" href="@Url.Action("Categories", new { page = 1 })" aria-label="First">
+                        <span aria-hidden="true">&laquo;&laquo;</span>
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="@Url.Action("Categories", new { page = Model.PageNumber - 1 })" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+            }
+
+            @for (int i = 1; i <= Model.TotalPages; i++)
+            {
+                <li class="page-item @(i == Model.PageNumber ? "active" : "")">
+                    <a class="page-link" href="@Url.Action("Categories", new { page = i })">@i</a>
+                </li>
+            }
+
+            @if (Model.PageNumber < Model.TotalPages)
+            {
+                <li class="page-item">
+                    <a class="page-link" href="@Url.Action("Categories", new { page = Model.PageNumber + 1 })" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="@Url.Action("Categories", new { page = Model.TotalPages })" aria-label="Last">
+                        <span aria-hidden="true">&raquo;&raquo;</span>
+                    </a>
+                </li>
+            }
+        </ul>
+    </nav>
+    <!--paginationend-->
 
 </body>
 </html>

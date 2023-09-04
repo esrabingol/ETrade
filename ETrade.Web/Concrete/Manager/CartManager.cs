@@ -16,9 +16,9 @@ namespace ETrade.Web.Concrete.Manager
             _cartRepository= cartRepository;
         }
 
-		public void AddToCart(string userId, int productId, int quantity)
+		public void AddToCart(int Id, int productId, int quantity)
 		{
-            var cart = GetCartByUserId(userId);
+            var cart = GetCartByUserId(Id);
             if(cart!=null)
             {
                 var index = cart.cartItems.FindIndex(i => i.ProductId == productId);
@@ -42,26 +42,26 @@ namespace ETrade.Web.Concrete.Manager
 
 		}
 
-		public void DeleteBasket(string userId, int productId)
+		public void DeleteBasket(int Id, int productId)
 		{
-			var cart = GetCartByUserId(userId);
+			var cart = GetCartByUserId(Id);
             if(cart!=null) 
             {
                 _cartRepository.DeleteFromCart(cart.Id, productId);
             }
 		}
 
-		public Cart GetCartByUserId(string userId)
+		public Cart GetCartByUserId(int Id)
         {
-            return _cartRepository.GetByUserId(userId);
+            return _cartRepository.GetByUserId(Id); //kullancının id'si
         }
 
 
-        public void InitializeCart(string userid)
+        public void InitializeCart(int Id) //kullancı Id alınıp string Id formatına dönüştürülüp kaydedilicek
         {
             _cartRepository.Create(new Cart()
             {
-                UserId = userid
+                UserId = Id.ToString()   //userid gelmiyor?
             });
         }
 

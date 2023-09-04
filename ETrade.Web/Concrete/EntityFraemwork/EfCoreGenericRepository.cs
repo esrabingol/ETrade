@@ -21,7 +21,7 @@ namespace ETrade.Concrete.EntityFraemwork
 
         public virtual void Create(T entity)
         {
-            //hepsini buna benzetiesin sen
+            //hepsini buna benzetirsin sen
             _context.Set<T>().Add(entity); //aldıgımız contexti kullandık
             _context.SaveChanges();
         }

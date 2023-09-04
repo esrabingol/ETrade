@@ -15,7 +15,6 @@
 
 <!--===============================================================================================-->
 	<link href="~/login/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
-@*	<a href="~/login/vendor/bootstrap/css/bootstrap.min.css.map">~/login/vendor/bootstrap/css/bootstrap.min.css.map</a>*@
 <!--===============================================================================================-->
 	<link href="~/login/fonts/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" />
 <!--===============================================================================================-->
@@ -41,7 +40,24 @@
 	<div class="limiter">
 		<div class="container-login100" style=" "<img src="~/login/images/bg-01.jpg" /> 
 			<div class="wrap-login100 p-l-55 p-r-55 p-t-65 p-b-54">
+
+				@if (TempData.ContainsKey("SuccessMessage"))
+				{
+		<div class="alert alert-success">
+			
+						@TempData["SuccessMessage"]
+		</div>
+				}
 				<form class="login100-form validate-form"  asp-controller="Home" asp-action="Login" method="post">
+
+						@if (TempData.ContainsKey("ErrorMessage"))
+							{
+			<div class="alert alert-danger">
+
+									@TempData["ErrorMessage"]
+			</div>
+							}
+
 					<span class="login100-form-title p-b-49">
 						Giriş Yap
 					</span>
@@ -53,22 +69,23 @@
 				<div class="input-100">
 					<input asp-for="FirstName" value="@Model.FirstName" class="form-control" />
 							<span asp-validation-for="FirstName" class="text-danger"> </span>
+						
 				</div>
 		</div>
 
-					<div class=class="wrap-input100 validate-input m-b-23">
+					<div class="wrap-input100 validate-input m-b-23">
 
 						<label asp-for="Password" class="label-input100"> Şifre :</label>
 						<div class="input-100">
-							<input asp-for="Password" value="@Model.Password" class="form-control" />
+							<input asp-for="Password" type ="password" value="@Model.Password" class="form-control" />
 								<span asp-validation-for="Password" class="text-danger"> </span>
-
+						
 						</div>
 						</div>
 
 
 					<div class="text-right p-t-8 p-b-31">
-						 <a href="@Url.Action("ResetPassword", "Home")"/> Şifremi Unuttum? </a>
+						 <a href="@Url.Action("ForgotPassword", "Home")"/> Şifremi Unuttum? </a>
 					</div>
 
 					<div class="container-login100-form-btn">
@@ -105,8 +122,6 @@
 		</div>
 	</div>
 
-
-	<div id="dropDownSelect1"></div>
 
 <!--===============================================================================================-->
 	<script src="~/login/vendor/jquery/jquery-3.2.1.min.js"></script>

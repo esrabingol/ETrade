@@ -11,6 +11,7 @@ namespace ETrade.Abstract
     {
 
         IEnumerable<Product> GetPopulerProducts();
+      
 
     }
 }

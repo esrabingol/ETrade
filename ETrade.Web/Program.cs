@@ -25,21 +25,30 @@ builder.Services.AddDbContext<HomeContext>(options =>
 });
 
 builder.Services.AddIdentity<ApplicationUser, Role>()
-   .AddEntityFrameworkStores<HomeContext>();
+   .AddEntityFrameworkStores<HomeContext>()
+   .AddDefaultTokenProviders();
+
 
 builder.Services.Configure<IdentityOptions>(options =>
 {
+
+    options.Password.RequireNonAlphanumeric = false; // Özel karakter gereksinimi devre dýþý býrakýlýyor
+    options.Password.RequireUppercase = false; // Büyük harf gereksinimi devre dýþý býrakýlýyor
+    options.Password.RequireLowercase = false; // Küçük harf gereksinimi devre dýþý býrakýlýyor
+
+
     options.Lockout.MaxFailedAccessAttempts = 5;
     options.Lockout.DefaultLockoutTimeSpan= TimeSpan.FromMinutes(2);
     options.Lockout.AllowedForNewUsers= true;
     options.User.RequireUniqueEmail= true;
+    
 });
 
 builder.Services.AddScoped<IAnnouncementRepository, EfCoreAnnouncementRepository>();
 
 builder.Services.AddScoped<IProductRepository, EfCoreProductRepository>(); // MemoryProduct üzerinden gelen ile ayný altyapýya sahip
 
-builder.Services.AddScoped<ICartRepository, EfCoreCartRepository>();
+builder.Services.AddScoped<ICartRepository, EfCoreCartRepository>(); 
 
 builder.Services.AddScoped<IAnnouncementService, AnnouncementService>();
 
