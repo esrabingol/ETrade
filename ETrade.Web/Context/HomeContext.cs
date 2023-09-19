@@ -44,6 +44,8 @@ namespace ETrade.Context
         {
 
             base.OnModelCreating(modelBuilder);
+
+         
             //Fluent-Api kullanımı 
             modelBuilder.Entity<ProductCategory>()
                .HasKey(t => new { t.ProductId, t.CategoryId }); // tablonun birincil anahtarı da iki anahtar olmuş oluyor

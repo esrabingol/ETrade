@@ -70,12 +70,25 @@ app.UseStaticFiles();
 
 app.UseAuthentication();//kullanýcý doðrulamak için kullanýlýr.
 
-app.UseAuthorization();//yetki,izin
+//app.UseAuthorization();//yetki,izin
+
+//app.UseRouting();
+
+//app.MapControllerRoute(
+//    name: "default",
+//    pattern: "{controller=Home}/{action=Index}/{id?}");
+
 
 app.UseRouting();
 
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+app.UseAuthorization(); // Yetkilendirme iþlemi routing'den önce gelmelidir.
+
+app.UseEndpoints(endpoints =>
+{
+	endpoints.MapControllerRoute(
+		name: "default",
+		pattern: "{controller=Home}/{action=Index}/{id?}");
+});
+
 
 app.Run();

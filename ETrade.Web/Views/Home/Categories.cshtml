@@ -43,7 +43,7 @@
     /*pagination */
     .pagination {
         text-align: center;
-        padding-left: 495px;
+        padding-left: 220px;
     }
 
         .pagination .page-item .page-link {
@@ -70,7 +70,7 @@
     .product-card {
         display: inline-block;
         flex-basis: calc(30% - 10px); /*İki kartı yan yana yerleştirir ve boşlukları çıkarır*/
-        margin: 29px; /*Kartlar arasındaki boşluğu belirler */
+        margin: 2px; /*Kartlar arasındaki boşluğu belirler */
         padding: 20px;
         border: 1px solid #ccc;
         text-align: center;
@@ -117,7 +117,7 @@
 
                         <li><a href="#"><span class="glyphicon glyphicon-bell"></span> </a></li>
                         <li><a href="@Url.Action("Favorites","Home")"><span class="glyphicon glyphicon-heart"></span></a></li>
-                        <li><a href="@Url.Action("Basket","Home")"><span class="glyphicon glyphicon-shopping-cart"></span></a></li>
+                        <li><a href="@Url.Action("Index","Cart")"><span class="glyphicon glyphicon-shopping-cart"></span></a></li>
                         <li><a href="@Url.Action("Logout","Home")"><span class="glyphicon glyphicon-log-out"></span></a></li>
                     }
                     else
@@ -136,6 +136,26 @@
         <strong><h3 style="margin-top: -73px">YENİ EKLENEN ÜRÜNLER</h3></strong>
         <div class="w3-row-padding w3-padding-32" style="margin:0 -16px">
 
+         <form method="get" action="@Url.Action("Categories")">
+    <div class="form-group">
+        <label for="category">Ürün Kategorisi Seçin:</label>
+                  
+                    <div class="alert alert-info" role="alert">
+						@ViewBag.CategoryMessage
+                    </div>
+                    <div class="form-group" style="display: flex; align-items: center;">
+                        <select id="category" name="category" class="form-control" style="width: 85%; border-radius: 25px; margin-right: 10px;">
+                            <option value="">Tüm Kategoriler</option>
+                            <option value="Ev">EV</option>
+                            <option value="Mobilya">MOBİLYA</option>
+                            <option value="Mutfak">MUTFAK</option>
+                            <option value="Banyo">BANYO</option>
+                            <option value="Yatak Odası">YATAK ODASI</option>
+                            <!-- Diğer kategori seçeneklerini ekleyin -->
+                        </select>
+                        <button type="submit" class="btn btn-primary" style="border-radius:15px;">Filtrele</button>
+                    </div>
+</form>
 
              @foreach (var item in Model.Products)//hepsinidb den çekip gösteriyor
              {
@@ -152,10 +172,10 @@
                         <p class="card-text">@item.ProductPrice &#8378;</p>
 					   
                         <div class="card-footer text-center">
-                            <a asp-controller="Home" asp-action="AddToCart" asp-route-id="@item.ProductId">
+                            <a asp-controller="Cart" asp-action="AddToCart" asp-route-id="@item.ProductId">
                             <button class="glyphicon glyphicon-shopping-cart" onclick="document.getElementById('ticketModal').style.display='block'"></button>
                             </a>
-                            <a asp-controller="Home" asp-action="Details" asp-route-id="@item.ProductId">
+                          <a asp-controller="Home" asp-action="Details" asp-route-id="@item.ProductId">
                                 <button class="glyphicon glyphicon-search" onclick="document.getElementById('ticketModal').style.display='block'"></button>
                             </a>
                             <a href="@Url.Action("Favorites","Home")">

@@ -58,6 +58,14 @@
 			</div>
 							}
 
+					@if (TempData["ErrorMessageOne"] != null)
+					{
+		<div class="alert alert-danger">
+							@TempData["ErrorMessageOne"]
+		</div>
+					}
+
+
 					<span class="login100-form-title p-b-49">
 						Giriş Yap
 					</span>

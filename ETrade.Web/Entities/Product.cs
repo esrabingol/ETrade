@@ -13,7 +13,7 @@ namespace ETrade.Entities
 		public decimal? ProductPrice { get; set; }
 		public string ProductCategory { get; set; }
 
-		public int UserId { get; set; }
+		public int UserId { get; set; } 
 		public List<ProductCategory> productCategories { get; set; }
 		
 	}

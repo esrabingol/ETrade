@@ -61,7 +61,7 @@
     /*pagination */
     .pagination {
         text-align: center;
-        padding-left: 340px;
+        padding-left: 0px;
     }
 
         .pagination .page-item .page-link {
@@ -165,11 +165,11 @@
                     @if (User.Identity.IsAuthenticated)
 
                     {
-                        <li><a href="@Url.Action("Manage","Home")"> @User.Identity.Name  </a></li>
+                        <li><a href="@Url.Action("UserPage","Home")"> @User.Identity.Name  </a></li>
 
                         <li><a href="#"><span class="glyphicon glyphicon-bell"></span> </a></li>
                         <li><a href="@Url.Action("Favorites","Home")"><span class="glyphicon glyphicon-heart"></span></a></li>
-                        <li><a href="@Url.Action("Basket","Home")"><span class="glyphicon glyphicon-shopping-cart"></span></a></li>
+                        <li><a href="@Url.Action("Index","Cart")"><span class="glyphicon glyphicon-shopping-cart"></span></a></li>
                         <li><a href="@Url.Action("Logout","Home")"><span class="glyphicon glyphicon-log-out"></span></a></li>
                     }
                       else
@@ -255,17 +255,15 @@
                         <a href="#">@item.ProductName</a>
                         <p class="card-text">@item.ProductPrice &#8378;</p>
 
-                        <div class="card-footer text-center">
-                            <a asp-controller="Home" asp-action="Basket" asp-route-id="@item.ProductId">
-                                <button class="glyphicon glyphicon-shopping-cart" onclick="document.getElementById('ticketModal').style.display='block'"></button>
-                            </a>
-                            <a asp-controller="Home" asp-action="Details" asp-route-id="@item.ProductId">
-                                <button class="glyphicon glyphicon-search" onclick="document.getElementById('ticketModal').style.display='block'"></button>
-                            </a>
-                            <a href="@Url.Action("Favorites","Home")">
-                                <button class="glyphicon glyphicon-heart" onclick="document.getElementById('ticketModal').style.display='block'"></button>
-                            </a>
-                        </div>
+                                <div class="card-footer text-center">
+
+                                    <a asp-controller="Home" asp-action="Details" asp-route-id="@item.ProductId">
+                                        <button style="line-height:2" class="glyphicon glyphicon-search" onclick="document.getElementById('ticketModal').style.display='block'">Ürünü İncele</button>
+                                    </a>
+                                    <a href="@Url.Action("Favorites","Home")">
+                                        <button style="line-height:2" class="glyphicon glyphicon-heart" onclick="document.getElementById('ticketModal').style.display='block'">Favorilere Ekle</button>
+                                    </a>
+                                </div>
 
                     </div>
                 </div>

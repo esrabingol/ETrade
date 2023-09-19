@@ -13,7 +13,7 @@ namespace ETrade.Services
 
         //IAnnouncementRepository bu yani. bunu çağırıp kullancan bunun hangi katmanda oldugu sana baglı
         private readonly IAnnouncementRepository _announcementRepository;
-		//yaptıklarımın hepsini geri almışsın kaybetmişsin degişiklikleri
+	
 		public AnnouncementService(IAnnouncementRepository announcementRepository)
 		{
 			_announcementRepository = announcementRepository;

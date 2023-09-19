@@ -39,7 +39,9 @@
 	<link href="~/login/css/main.css" rel="stylesheet" />
 </head>
 <style>
- 
+    .text-red {
+        color: red;
+    }
    .wrapper
    {
        background-color: white;
@@ -120,10 +122,18 @@
                                     <div class="input-100">
                                         <input asp-for="Password" value="@Model.Password" class="form-control" />
                                         <span asp-validation-for="Password" class="text-danger"> </span>
+							
                                     </div>
                                 </div>
-                            
+                        @if (TempData.ContainsKey("PasswordInfo"))
+                        {
+                            <div class="alert alert-danger text-red">
 
+                                @TempData["PasswordInfo"]
+                            </div>
+                        }
+				
+                  
 
                         <div class="container-login100-form-btn">
                             <div class="wrap-login100-form-btn">

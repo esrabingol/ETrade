@@ -16,55 +16,54 @@ namespace ETrade.Web.Concrete.Manager
             _cartRepository= cartRepository;
         }
 
-		public void AddToCart(int Id, int productId, int quantity)
-		{
-            var cart = GetCartByUserId(Id);
-            if(cart!=null)
-            {
-                var index = cart.cartItems.FindIndex(i => i.ProductId == productId);
-
-                if(index<0)
-                {
-                    cart.cartItems.Add(new CartItem()
-                    {
-                        ProductId= productId,
-                        Quantity = quantity,
-                        CartId= cart.Id
-                    });
-                }
-                else
-                {
-                    cart.cartItems[index].Quantity += quantity; // miktrar güncelleme işlemi 
-                }
-
-                _cartRepository.Update(cart);
-            }
-
-		}
-
-		public void DeleteBasket(int Id, int productId)
-		{
-			var cart = GetCartByUserId(Id);
-            if(cart!=null) 
-            {
-                _cartRepository.DeleteFromCart(cart.Id, productId);
-            }
-		}
-
-		public Cart GetCartByUserId(int Id)
-        {
-            return _cartRepository.GetByUserId(Id); //kullancının id'si
-        }
-
-
-        public void InitializeCart(int Id) //kullancı Id alınıp string Id formatına dönüştürülüp kaydedilicek
+        public void InitializeCart(int UserId)
         {
             _cartRepository.Create(new Cart()
             {
-                UserId = Id.ToString()   //userid gelmiyor?
+                UserId = UserId  
             });
         }
 
+        
+        public Cart GetCartByUserId(int UserId)
+        {
+            return _cartRepository.GetByUserId(UserId); 
+        }
 
-    }
+		public void AddToCart(int UserId, int productId, int quantity)
+		{
+			var cart = GetCartByUserId(UserId);
+			if(cart !=null)
+			{
+				var index = cart.cartItems.FindIndex(i => i.ProductId == productId);
+				
+				if(index<0)
+				{
+					cart.cartItems.Add(new CartItem()
+					{
+						ProductId= productId,
+						Quantity = quantity,
+						CartId = cart.Id
+					});
+				}
+				else
+				{
+					cart.cartItems[index].Quantity += quantity;
+				}
+				_cartRepository.Update(cart);
+			}
+		}
+
+		public void DeleteFromCart(int userId, int productId)
+		{
+			var cart = GetCartByUserId(userId);
+			if(cart !=null)
+			{
+				_cartRepository.DeleteFromCart(cart.Id,productId);
+
+
+			}
+
+		}
+	}
 }

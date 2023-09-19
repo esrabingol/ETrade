@@ -22,14 +22,30 @@ namespace ETrade.Controllers
             //_categoryService = categoryService;
         }		
 		
-		public IActionResult Index()
-		{
+
+
+        public IActionResult Index(string category)
+        {
+            List<Product> products;
+
+                if (!string.IsNullOrEmpty(category))
+            {
+                products = _productService.GetAll().Where(p => p.ProductCategory == category).ToList();
+            }
+                else
+            {
+                products = _productService.GetAll();
+            }
+
+            // Seçilen kategoriye göre uyarı mesajını ayarla
+            ViewBag.CategoryMessage = string.IsNullOrEmpty(category) ? "Tüm kategorileri görüntülüyorsunuz." : "Seçilen Kategori: " + category;
 
             return View(new ProductListModel()
             {
-                Products = _productService.GetAll()
-
+                Products = products
             });
+
+
         }
 
         [HttpGet]
@@ -167,16 +183,6 @@ namespace ETrade.Controllers
            
         }
 
-
-      
-        //public IActionResult CategoryList() //Ürüne uygun kategori
-        //{
-        //    return View(new CategoryListModel()
-        //    {
-        //        Categories = _categoryService.GetAll()
-        //    });
-
-        //}
 
     }
 }

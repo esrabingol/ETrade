@@ -7,21 +7,21 @@ namespace ETrade.Entities
     public class Order:IEntity
     {
         public int Id { get; set; }
-        public string OrderNumber { get; set; }
+        public int OrderNumber { get; set; } 
         public DateTime OrderDate { get; set; }
-        public string UserId { get; set; }
+        public int UserId { get; set; } 
         public EnumOrderState OrderState { get; set; }
         public EnumPaymentTypes PaymentTypes { get; set; }
         public string  FirstName { get; set; }
         public string  LastName { get; set; }
         public string Address { get; set; }
         public string City { get; set; }
-        public string Phone { get; set; }
+        public long Phone { get; set; }
         public string Email { get; set; }
         public string OrderNote { get; set; }
-        public string PaymentId { get; set; }
+        public int PaymentId { get; set; } //int yapıldı
         public string PaymentToken { get; set; }
-        public string ConversationId { get; set; }
+        public int ConversationId { get; set; }
         public List<OrderItem> orderItems { get; set; }
     }
 

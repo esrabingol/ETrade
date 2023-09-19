@@ -4,7 +4,9 @@ using System.ComponentModel.DataAnnotations;
 namespace ETrade.Models
 {
 	public class SignUpModel 
-	{  //kullanıcıdan alınacak bilgiler
+
+	{
+        //kullanıcıdan alınacak bilgiler
 
 		[Required(ErrorMessage ="İsim alanı boş geçilemez")]
 		public string FirstName { get; set; }
@@ -18,6 +20,7 @@ namespace ETrade.Models
 
         [Required(ErrorMessage = "Telefon Numarası alanı boş geçilemez")]
         public string Phone { get; set; }
+
 
         [Required(ErrorMessage = "Şifre alanı boş geçilemez")]
         [DataType(DataType.Password)]

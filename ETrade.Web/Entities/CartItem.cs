@@ -2,10 +2,9 @@
 
 namespace ETrade.Entities
 {
-    public class CartItem :IEntity //ürün id ve sepet id 
+    public class CartItem :IEntity 
     {
-        public int Id { get; set; }
-
+        public int Id { get; set; } 
         public Product product { get; set; }
         public int ProductId { get; set; }
         public Cart cart { get; set; }

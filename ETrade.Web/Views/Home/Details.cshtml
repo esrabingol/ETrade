@@ -1,5 +1,6 @@
 ﻿
 
+
 <!--Ürün incele ekranım -->
 @model Product
 <head>
@@ -55,7 +56,7 @@
                     @if (User.Identity.IsAuthenticated)
 
                     {
-                        <li><a href="#"> @User.Identity.Name  </a></li>
+                        <li><a href="@Url.Action("UserPage","Home")"> @User.Identity.Name  </a></li>
                         <li><a href="@Url.Action("Login","Home")"><span class="glyphicon glyphicon-shopping-cart"></span></a></li>
                         <li><a href="@Url.Action("Favorites","Home")"><span class="glyphicon glyphicon-heart"></span></a></li>
                         <li><a href="@Url.Action("Logout","Home")"><span class="glyphicon glyphicon-log-out"></span></a></li>
@@ -104,57 +105,26 @@
                             @Model.Description
                       </h4>
 
-                    </div>
-</div>
-
-                 <form asp-controller="Home" asp-action="AddToCart" method="post" class="form-inline">
-                        <input type="hidden" name="productId" value="@Model.ProductId" />
-               
-                    <div class="input-group mb-3">
-							<input type="number" name="Quantity" class="form-control" value="1" min="1" step="1" style="width:100px;" />
-
-                            <div class="input-group-append">
-                                <button type="submit" class=" btn btn-primary">
-								<i class=" fas fa-cart-plus"> </i>  Sepete Ekle
-							</button>
-
-                            <div style="width: 10px;"></div>
-
-                            <button type="submit" class=" btn btn-primary">
-                                <i class="fa fa-heart"></i> Favorilere Ekle
-                            </button>
-						</div>
-					</div>
-
-                        
-                        <!--bu kısım doğru çalışıyor.-->
-                  @* @if(User.Identity.IsAuthenticated)
-                    {
-                        <div class="icons">
-                            <a href="@Url.Action("Basket","Home")" class="btn btn-primary btn-lg" style="font-size: 12px; border-radius: 19px;">
-                                <span class="glyphicon glyphicon-shopping-cart"></span>
-                            </a>
-                            <a href="@Url.Action("Favorites","Home")" class="btn btn-primary btn-lg" style="font-size: 12px; border-radius: 19px;">
-                                <span class="glyphicon glyphicon-heart"></span>
-                            </a>
-                        </div>
-                    }
-                    else
-                    {
-                        <div class="icons">
-                            <a href="@Url.Action("Login","Home")" class="btn btn-primary btn-lg" style="font-size: 12px; border-radius: 19px;">
-                                <span class="glyphicon glyphicon-shopping-cart"></span>
-                            </a>
-                            <a href="@Url.Action("Login","Home")" class="btn btn-primary btn-lg" style="font-size: 12px; border-radius: 19px;">
-                                <span class="glyphicon glyphicon-heart"></span>
-                            </a>
-                        </div>
-                    }
-*@
                     
+                            <form asp-controller="Cart" asp-action="AddToCart" method="post" class="form-inline">
+                                <input type="hidden" name="productId" value="@Model.ProductId" />
 
-                 </form>
-              
-               
+                            <div class="input-group mb-3">
+                                    <input type="number" name="Quantity" class="form-control" value="1" min="1" step="1" style="width:100px;" />
+
+                                <div class="input-group-append">
+                                    <button type ="submit" class="btn btn-primary">
+                                        <i class="fas fa-cart-plus"> </i> Sepete Ekle
+                                    </button>
+
+                                </div>
+                            </div>
+                      </form>
+                        
+
+
+                    </div>
+                    </div>
+             
 
 </body>

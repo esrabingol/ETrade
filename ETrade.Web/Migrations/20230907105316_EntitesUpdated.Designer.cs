@@ -4,6 +4,7 @@ using ETrade.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ETrade.Migrations
 {
     [DbContext(typeof(HomeContext))]
-    partial class HomeContextModelSnapshot : ModelSnapshot
+    [Migration("20230907105316_EntitesUpdated")]
+    partial class EntitesUpdated
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -73,6 +75,9 @@ namespace ETrade.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
 
                     b.ToTable("Carts");
                 });
@@ -627,6 +632,15 @@ namespace ETrade.Migrations
                     b.Navigation("topic");
                 });
 
+            modelBuilder.Entity("ETrade.Entities.Cart", b =>
+                {
+                    b.HasOne("ETrade.Entities.User", null)
+                        .WithOne("cart")
+                        .HasForeignKey("ETrade.Entities.Cart", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("ETrade.Entities.CartItem", b =>
                 {
                     b.HasOne("ETrade.Entities.Cart", "cart")
@@ -776,6 +790,9 @@ namespace ETrade.Migrations
 
             modelBuilder.Entity("ETrade.Entities.User", b =>
                 {
+                    b.Navigation("cart")
+                        .IsRequired();
+
                     b.Navigation("products");
                 });
 #pragma warning restore 612, 618

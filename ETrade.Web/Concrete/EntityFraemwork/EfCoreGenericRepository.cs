@@ -22,7 +22,7 @@ namespace ETrade.Concrete.EntityFraemwork
         public virtual void Create(T entity)
         {
             //hepsini buna benzetirsin sen
-            _context.Set<T>().Add(entity); //aldıgımız contexti kullandık
+            _context.Set<T>().Add(entity); //aldıgımız contexti kullandık, 
             _context.SaveChanges();
         }
 
@@ -51,7 +51,7 @@ namespace ETrade.Concrete.EntityFraemwork
             return _context.Set<T>().Where(filter).SingleOrDefault();
         }
 
-        public virtual void Update(T entity)
+        public virtual void Update(T entity) //(virtual) override edebilirim demek.
         {
             _context.Entry(entity).State = EntityState.Modified;
             _context.SaveChanges(); //entity'nin değişen kısımları direkt update edilir.
