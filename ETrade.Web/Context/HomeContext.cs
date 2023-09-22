@@ -31,6 +31,8 @@ namespace ETrade.Context
         public DbSet<User> Users { get; set; }
         public DbSet<Cart> Carts { get; set; }
         public DbSet<CartItem> CartItems { get; set; }
+        public DbSet<Favorite> Favorites { get; set; }
+        public DbSet<FavoriteItems> FavoriteItems { get; set; }
         public DbSet<Category> categories { get; set; }
         public DbSet<Order> orders { get; set; }
         public DbSet<ApplicationUser> applicationUsers { get; set; }

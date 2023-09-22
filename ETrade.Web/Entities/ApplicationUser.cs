@@ -9,5 +9,6 @@ namespace ETrade.Web.Entities
         public string LastName { get; set; }
         public string Password { get; set; }
 
+
     }
 }

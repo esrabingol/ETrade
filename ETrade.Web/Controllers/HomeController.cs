@@ -27,17 +27,18 @@ namespace ETrade.Controllers
         private UserManager<ApplicationUser> _userManager;
         private SignInManager<ApplicationUser> _signInManager;
         private ICartService _cartService;
-        private readonly HomeContext _context;
+        private IFavoriteService _favoriteService;
+		private readonly HomeContext _context;
         public HomeController(ICartService cartService, IProductService productService,
             UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager,
-            HomeContext context)
+            HomeContext context, IFavoriteService favoriteService)
         {
             _productService = productService;
             _userManager = userManager;
             _signInManager = signInManager;
             _cartService = cartService;
             _context = context;
-
+            _favoriteService = favoriteService;
         }
 
         public IActionResult Index(string message = null)
@@ -63,11 +64,7 @@ namespace ETrade.Controllers
             return View(product);
         }
 
-        public IActionResult Favorites()
-        {
-            return View();
-        }
-
+  
         public IActionResult Products()
         {
             var products = _productService.GetAll();
@@ -242,10 +239,11 @@ namespace ETrade.Controllers
             {
                 //create cart object
                 _cartService.InitializeCart(user.Id);
+				//create favorite object
+				_favoriteService.InitializeFavorite(user.Id);
 
-
-                // Kullanıcıyı oturum açtırabilirsiniz (isteğe bağlı):
-                await _signInManager.SignInAsync(user, isPersistent: false); //kullanıcı bilgileri doğruca geliyor
+				// Kullanıcıyı oturum açtırabilirsiniz (isteğe bağlı):
+				await _signInManager.SignInAsync(user, isPersistent: false); //kullanıcı bilgileri doğruca geliyor
 
                 // Başarılı kayıt uyarısı ekleyin
                 TempData["SuccessMessage"] = "Kaydınız başarıyla oluşturuldu! Lütfen giriş yapın.";
@@ -369,6 +367,8 @@ namespace ETrade.Controllers
 
         }
 
+
+
         public async Task<IActionResult> UserPage()
         {
             //Oturum açan kullanıcının kimliğini al
@@ -395,10 +395,29 @@ namespace ETrade.Controllers
         }
 
 
+        [HttpPost]
+        public async Task<IActionResult> DeleteUser()
+        {
+            var user = await _userManager.GetUserAsync(User); //kullanıcı id yi alıyor
 
+            if (user == null)
+            {
+                return NotFound();
+            }
 
+            var result = await _userManager.DeleteAsync(user);
 
+            if (result.Succeeded)
+            {
+                await _signInManager.SignOutAsync();
+                TempData["SuccessMessage"] = "HESABINIZ BAŞARIYLA SİLİNDİ ";
+                TempData["SuccessMessageOne"] = "GİRİŞ YAPMAK İÇİN ÜYE OLUNUZ... ";
 
+                return RedirectToAction("Index", "Home");
+            }
+
+            return View();
+        }
 
     }
 }

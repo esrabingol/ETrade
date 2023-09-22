@@ -1,4 +1,4 @@
-﻿<!--Basket-->
+﻿<!--Favorite-->
 <head>
 	<!-- Bootstrap CSS -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
@@ -52,7 +52,7 @@
 
 
 @using ETrade.Web.Models;
-@model CartModel
+@model FavoriteModel
 
 @{
 	ViewData["Title"] = "Index";
@@ -91,13 +91,12 @@
 					<li><a href="@Url.Action("UserPage","Home")"> @userNamePart</a></li>
 
 					<li><a href="#"><span class="glyphicon glyphicon-bell"></span> </a></li>
-					<li><a href="@Url.Action("Index","Favorite")"><span class="glyphicon glyphicon-heart"></span></a></li>
+					<li><a href="@Url.Action("Index","Cart")"><span class="glyphicon glyphicon-shopping-cart"></span></a></li>
 					<li><a href="@Url.Action("Logout","Home")"><span class="glyphicon glyphicon-log-out"></span></a></li>
 				}
 				else
 				{
 					<li><a href="@Url.Action("Login","Home")"><span class="glyphicon glyphicon-heart"></span></a></li>
-					<li><a href="@Url.Action("Login","Home")"><span class="glyphicon glyphicon-shopping-cart"></span></a></li>
 					<li><a href="@Url.Action("SignUp","Home")"><span class="glyphicon glyphicon-user"></span></a></li>
 					<li><a href="@Url.Action("Login","Home")"><span class="glyphicon glyphicon-log-in"></span></a></li>
 				}
@@ -106,12 +105,8 @@
 	</div>
 </nav>
 
-<h2>Alışveriş Sepeti</h2>
-<hr/>
-
-
-
-
+<h2>Favoriler</h2>
+<hr />
 
 <div class="row mt-5">
 	<div class="col-md-8">
@@ -119,107 +114,83 @@
 			<h3 style="margin-top: 0px;">Sepetteki Ürünler</h3>
 		</div>
 
-		@if(Model.CartItems.Count()>0)
+		@if (Model.favoriteItems.Count() > 0)
 		{
 			<table class="table table-hover">
-			<thead>
-				<tr>
-					<th></th>
-					<th>Ürün İsim</th>
-					<th>Ürün Açıklaması</th>
-					<th>Fiyat</th>
-					<th>Adet</th>
-					<th>Toplam Tutar</th>
-					<th></th>
-
-			    </tr>
-			</thead>
-			<tbody>
-				@foreach(var item in Model.CartItems)
-				{
+				<thead>
 					<tr>
-						<th>
-							<img src="~/@item.ImageUrl" width="80px"/>
-						</th>
-						<td>@item.Name</td>
-						<td>@item.Description</td>
-						<td>@item.Price.ToString("c")</td>
-                        <td>@item.Quantity</td>
-                        <td>@((item.Quantity * item.Price).ToString("c"))</td>
-						<th>
+						<th></th>
+						<th>Ürün İsim</th>
+						<th>Ürün Açıklaması</th>
+						<th>Fiyat</th>
+						<th></th>
 
-							<form asp-controller="Cart" asp-action="DeleteFromCart" method="post">
-							<input type="hidden" name="productId" value="@item.ProductId">
-								<button type="submit" class="btn btn-danger btn-sm" > 
-									<i class="fa fa-times fa-fw"></i>
-								</button>
-							</form>
-							
-					    </th>
 					</tr>
-				}
-			</tbody>
-			
+				</thead>
+				<tbody>
+					@foreach (var item in Model.favoriteItems)
+					{
+						<tr>
+							<th>
+								<img src="~/@item.ImageUrl" width="80px" />
+							</th>
+							<td>@item.Name</td>
+							<td>@item.Description</td>
+							<td>@item.Price.ToString("c")</td>
+							<th>
+
+								<div class="d-flex justify-content-between">
+
+									<form asp-controller="Cart" asp-action="AddToCart" method="post" class="form-inline">
+										<input type="hidden" name="productId" value="@item.ProductId" />
+										<div class="input-group mb-3">
+											<input type="number" name="Quantity" class="form-control" value="1" min="1" step="1" style="height:27px;width: 60px; font-size: 13px; margin: 0px;" />
+											<div class="input-group-append">
+												<button type="submit" class="btn btn-primary" style="width:65px;margin: 0px;height:27px;">
+													<i class="fas fa-cart-plus"></i>
+												</button>
+											</div>
+										</div>
+									</form>
+									<form asp-controller="Favorite" asp-action="DeleteFromFavorite" method="post">
+										<input type="hidden" name="productId" value="@item.ProductId" />
+										<div class="input-group mb-3">
+											<div class="input-group-append">
+												<button type="submit" class="btn btn-danger btn-sm" style="margin: 0px;height:27px;">
+													<i class="fa fa-times"></i>
+												</button>
+											</div>
+										</div>
+									</form>
+								</div>
+
+							</th>
+						</tr>
+					}
+				</tbody>
+
 			</table>
 		}
 		else
 		{
 			<div class="alert alert-warning">
-				Sepette Ürün Yok!
+				Favorilenen Ürün Yok!
 			</div>
 
 		}
 
 	</div>
-
-
-
-
-	<div class="col-md-4">
-
-	
-
-		@if(Model.CartItems.Count()>0)
-		{
-			<div class="text-left">
-				<h3 style="margin-top: 40px;">Sepet Özeti</h3>
-			</div>
-			<table class="table">
-			<tbody>
-				<tr>
-					<th>Sepet Tutarı</th>
-					<td>@Model.TotalPrice().ToString("c")</td>
-				</tr>
-				<tr>
-					<th>KARGO</th>
-					<td style="color:red">100 TL Ve Üzeri Ücretsiz!</td>
-				</tr>
-
-				<tr>
-					<th>Sipariş Toplamı</th>
-					<td>@Model.TotalPrice().ToString("c")</td>
-				</tr>
-			</tbody>
-			
-		</table>
-		<div class="text-center">
-			<a href="@Url.Action("Index","Home")" class="btn btn-primary">
-				<i class="fa fa-arrow-circle-left fa-fw"></i> Alışverişe Devam Et!
-			</a>
-
-			<a href="@Url.Action("CheckOut","Cart")" class="btn btn-primary">
-				<i class="fa fa-arrow-circle-right fa-fw"></i> Ödemeyi Tamamla!
-			</a>
-			</div>
-		}
-	
-
-	</div>
-
-
-
 </div>
+
+
 <hr />
+<script src="~/slider/js/jquery.min.js"></script>
+<script src="~/slider/js/popper.js"></script>
+<script src="~/slider/js/bootstrap.min.js"></script>
+<script src="~/slider/js/owl.carousel.min.js"></script>
+<script src="~/slider/js/main.js"></script>
+
+
 
 <!-- info section -->
 <section class="info_section layout_padding">
@@ -292,31 +263,30 @@
                 </h3>
                 <ul>
                     <li>
-                        <a href="@Url.Action("BathRoom","Index")">
+                        <a href="@Url.Action("BathRoom","Home")">
                             Banyo Ürünleri
                         </a>
                     </li>
                     <li>
-                        <a href="@Url.Action("LivingRoom","Index")">
+                        <a href="@Url.Action("LivingRoom","Home")">
                             Oturma Odası Ürünleri
                         </a>
                     </li>
                     <li>
-                        <a href="@Url.Action("Kitchen","Index")">
+                        <a href="" @Url.Action("Kitchen","Home")"">
                             Mutfak Ürünleri
                         </a>
                     </li>
                     <li>
-                        <a href="@Url.Action("LivingRoom","Index")">
+                        <a href="" @Url.Action("LivingRoom","Home")"">
                             Dekorasyon Ürünleri
                         </a>
                     </li>
                     <li>
-                        <a href="@Url.Action("BedRoom","Index")">
+                        <a href="" @Url.Action("BedRoom","Home")"">
                             Yatak & Mobilya Ürünleri
                         </a>
                     </li>
-         
                 </ul>
             </div>
             <div class="col-md-3">
@@ -396,3 +366,4 @@
         document.getElementById("myNav").style.width = "0%";
     }
 </script>
+

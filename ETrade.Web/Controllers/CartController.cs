@@ -104,6 +104,7 @@ namespace ETrade.Controllers
 			string userIdString = _userManager.GetUserId(User);
 			if (int.TryParse(userIdString, out int userId))
 			{
+				
 				_cartService.DeleteFromCart(userId, productId); 
 			}
 			else
@@ -115,10 +116,14 @@ namespace ETrade.Controllers
 
 
 
+		public IActionResult CheckOut()
+		{
+			return View();
+		}
 
 
 
 
-	}
+    }
 }
 

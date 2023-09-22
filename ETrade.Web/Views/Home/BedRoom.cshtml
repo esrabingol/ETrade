@@ -133,6 +133,27 @@
         position: fixed;
     }
 
+    /* Butonların arka plan rengini bej yap */
+    .btn.btn-primary {
+        background-color: whitesmoke;
+        color: black; /* Yazının rengini siyah yap */
+    }
+
+    /* Butonları eşit genişlikte yap */
+    .card-footer .col-md-4 {
+        width: 33.33%;
+    }
+
+    /* Butonlara ekstra padding vererek boyutlarını küçült */
+    .card-footer .btn {
+        padding: 7px 0px;
+        font-size: 13px;
+    }
+
+    .row {
+        margin-right: -133px;
+        margin-left: 10px;
+    }
 
 </style>
 <body>
@@ -157,14 +178,18 @@
             </form>
 
             <nav class="navbar">
-                <ul class="nav navbar-nav navbar-right" style="font-size :15px;">
+                <ul class="nav navbar-nav navbar-right" style="font-size :15px; padding-right:65px;">
                     @if (User.Identity.IsAuthenticated)
 
                     {
-                        <li><a href="@Url.Action("UserPage","Home")"> @User.Identity.Name  </a></li>
+                        // Kullanıcı adını al
+                        var userName = User.Identity.Name;
+                        // Kullanıcı adını "@" karakterine kadar olan kısmını al
+                        var userNamePart = userName.Substring(0, userName.IndexOf('@'));
+                        <li><a href="@Url.Action("UserPage","Home")"> @userNamePart</a></li>
 
                         <li><a href="#"><span class="glyphicon glyphicon-bell"></span> </a></li>
-                        <li><a href="@Url.Action("Favorites","Home")"><span class="glyphicon glyphicon-heart"></span></a></li>
+                        <li><a href="@Url.Action("Index","Favorite")"><span class="glyphicon glyphicon-heart"></span></a></li>
                         <li><a href="@Url.Action("Index","Cart")"><span class="glyphicon glyphicon-shopping-cart"></span></a></li>
                         <li><a href="@Url.Action("Logout","Home")"><span class="glyphicon glyphicon-log-out"></span></a></li>
                     }
@@ -239,7 +264,7 @@
         <h2 style="font-family: 'Sofia', sans-serif; text-align: center;margin-top: 30px; margin-bottom: 20px">Tüm Yatak Odası Ürünleri</h2>
 
     <div class="w3-container w3-content w3-center w3-padding-64" style="max-width:800px" id="band">
-        <div class="w3-row-padding w3-padding-32" style="margin:7 -297px">
+        <div class="w3-row-padding w3-padding-32" style="margin:7px -297px">
 
 
             @foreach (var item in Model.Products)//hepsinidb den çekip gösteriyor
@@ -257,15 +282,52 @@
                         <p class="card-text">@item.ProductPrice &#8378;</p>
 
                             <div class="card-footer text-center">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <!-- Favorilere Ekle Butonu -->
+                                        <form asp-controller="Favorite" asp-action="AddToFavorite" method="post" class="form-inline">
+                                            <input type="hidden" name="productId" value="@item.ProductId" />
+                                            <div class="input-group mb-3">
+                                                <div class="input-group-append">
+                                                    <button type="submit" class="btn btn-primary">
+                                                        <i class="fas fa-heart"></i> Favorilere Ekle
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <!-- Ürünü İncele Butonu -->
+                                        <form asp-controller="Home" asp-action="Details" asp-route-id="@item.ProductId" class="form-inline">
+                                            <button type="submit" class="btn btn-primary">
+                                                <i class="fas fa-search"></i> Ürünü İncele
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <!-- Sepete Ekle Butonu -->
+                                        <form asp-controller="Cart" asp-action="AddToCart" method="post" class="form-inline">
+                                            <input type="hidden" name="productId" value="@item.ProductId" />
+                                            <div class="input-group mb-3">
+                                                <input type="number" name="Quantity" class="form-control" value="1" min="1" step="1" style="width: 100px; font-size: 20px; margin: 4px;" />
+                                                <div class="input-group-append">
+                                                    <button type="submit" class="btn btn-primary" style="margin: 4px;">
+                                                        <i class="fas fa-cart-plus"></i> Sepete Ekle
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </form>
 
-                                <a asp-controller="Home" asp-action="Details" asp-route-id="@item.ProductId">
-                                    <button style="line-height:2" class="glyphicon glyphicon-search" onclick="document.getElementById('ticketModal').style.display='block'">Ürünü İncele</button>
-                                </a>
-                                <a href="@Url.Action("Favorites","Home")">
-                                    <button style="line-height:2" class="glyphicon glyphicon-heart" onclick="document.getElementById('ticketModal').style.display='block'">Favorilere Ekle</button>
-                                </a>
+
+                                    </div>
+                                </div>
                             </div>
 
+
+
+              
                     </div>
                 </div>
 
@@ -313,6 +375,182 @@
             </ul>
         </nav>
         <!--paginationend-->
+        <hr />
+        <!-- info section -->
+        <section class="info_section layout_padding">
+            <div class="container links_container">
+                <div class="row ">
+                    <div class="col-md-3">
+                        <h2>
+                            BİZE ULAŞIN
+                        </h2>
+                        <ul>
+                            <li>
+                                <a href="">
+                                    <!--Link ile yönlendirilebilir-->
+                                    Mağazalarımız
+                                </a>
+                            </li>
+                            <li>
+                                <a href="">
+                                    Kurumsal ve Toptan Satış
+                                </a>
+                            </li>
+                            <li>
+                                <a href="">
+                                    Site Haritası
+                                </a>
+                            </li>
+                            <li>
+                                <a href="">
+                                    Hakkımızda
+                                </a>
+                            </li>
+
+                        </ul>
+                    </div>
+                    <div class="col-md-3">
+                        <h2>
+                            YARDIM
+                        </h2>
+                        <ul>
+                            <li>
+                                <a href="">
+                                    Kullanım Şartları
+                                </a>
+                            </li>
+                            <li>
+                                <a href="">
+                                    İade ve İptal Koşulları
+                                </a>
+                            </li>
+                            <li>
+                                <a href="">
+                                    Sipariş Sorgulama
+                                </a>
+                            </li>
+                            <li>
+                                <a href="">
+                                    Sıkça Sorulan Sorular
+                                </a>
+                            </li>
+                            <li>
+                                <a href="">
+                                    KVKK Veri İşleme Politikamız
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-md-3">
+                        <h3>
+                            Kategoriler
+                        </h3>
+                        <ul>
+                            <li>
+                                <a href="@Url.Action("BathRoom","Home")">
+                                    Banyo Ürünleri
+                                </a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("LivingRoom","Home")">
+                                    Oturma Odası Ürünleri
+                                </a>
+                            </li>
+                            <li>
+                                <a href="" @Url.Action("Kitchen","Home")"">
+                                    Mutfak Ürünleri
+                                </a>
+                            </li>
+                            <li>
+                                <a href="" @Url.Action("LivingRoom","Home")"">
+                                    Dekorasyon Ürünleri
+                                </a>
+                            </li>
+                            <li>
+                                <a href="" @Url.Action("BedRoom","Home")"">
+                                    Yatak & Mobilya Ürünleri
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-md-3">
+                        <h3>
+                            ÖZEL Sayfalar
+                        </h3>
+                        <ul>
+                            <li>
+                                <a href="">
+                                    Anneler Günü Hediyeleri
+                                </a>
+                            </li>
+                            <li>
+                                <a href="">
+                                    Babalar Günü Hediyeleri
+                                </a>
+                            </li>
+                            <li>
+                                <a href="">
+                                    Kadınlar Günü Hediyeleri
+                                </a>
+                            </li>
+                            <li>
+                                <a href="">
+                                    Sevgililer Günü Hediyeleri
+                                </a>
+                            </li>
+                            <li>
+                                <a href="">
+                                    Ofis Hediyeleri
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="follow_container">
+                    <div class="row">
+                        <div class="col-md-9">
+                            <div class="app_container">
+                                <h3>
+                                    DOWNLOAD OUR APPS
+
+                                </h3>
+                                <div>
+                                    <img src="~/templates/images/google-play.png" alt="">
+                                    <img src="~/templates/images/apple-store.png" alt="">
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- end info section -->
+        <!-- footer section -->
+        <section class="container-fluid footer_section">
+            <p>
+                Copyright &copy; 2019 All Rights Reserved
+                <a href="https://html.design/"></a>
+            </p>
+        </section>
+        <!-- footer section -->
+
+        <script type="text/javascript" src="~/templates/js/jquery-3.4.1.min.js"></script>
+        <script type="text/javascript" src="~/templates/js/bootstrap.js"></script>
+
+        <script>
+            function openNav() {
+                document.getElementById("myNav").style.width = "100%";
+            }
+
+            function closeNav() {
+                document.getElementById("myNav").style.width = "0%";
+            }
+        </script>
+
 
 </body>
 </html>

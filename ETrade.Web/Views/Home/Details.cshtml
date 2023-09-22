@@ -21,7 +21,64 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-
+<!--zoom-->
+    <script>
+        function imageZoom(imgID, resultID) {
+            var img, lens, result, cx, cy;
+            img = document.getElementById(imgID);
+            result = document.getElementById(resultID);
+            /*create lens:*/
+            lens = document.createElement("DIV");
+            lens.setAttribute("class", "img-zoom-lens");
+            /*insert lens:*/
+            img.parentElement.insertBefore(lens, img);
+            /*calculate the ratio between result DIV and lens:*/
+            cx = result.offsetWidth / lens.offsetWidth;
+            cy = result.offsetHeight / lens.offsetHeight;
+            /*set background properties for the result DIV:*/
+            result.style.backgroundImage = "url('" + img.src + "')";
+            result.style.backgroundSize = (img.width * cx) + "px " + (img.height * cy) + "px";
+            /*execute a function when someone moves the cursor over the image, or the lens:*/
+            lens.addEventListener("mousemove", moveLens);
+            img.addEventListener("mousemove", moveLens);
+            /*and also for touch screens:*/
+            lens.addEventListener("touchmove", moveLens);
+            img.addEventListener("touchmove", moveLens);
+            function moveLens(e) {
+                var pos, x, y;
+                /*prevent any other actions that may occur when moving over the image:*/
+                e.preventDefault();
+                /*get the cursor's x and y positions:*/
+                pos = getCursorPos(e);
+                /*calculate the position of the lens:*/
+                x = pos.x - (lens.offsetWidth / 2);
+                y = pos.y - (lens.offsetHeight / 2);
+                /*prevent the lens from being positioned outside the image:*/
+                if (x > img.width - lens.offsetWidth) { x = img.width - lens.offsetWidth; }
+                if (x < 0) { x = 0; }
+                if (y > img.height - lens.offsetHeight) { y = img.height - lens.offsetHeight; }
+                if (y < 0) { y = 0; }
+                /*set the position of the lens:*/
+                lens.style.left = x + "px";
+                lens.style.top = y + "px";
+                /*display what the lens "sees":*/
+                result.style.backgroundPosition = "-" + (x * cx) + "px -" + (y * cy) + "px";
+            }
+            function getCursorPos(e) {
+                var a, x = 0, y = 0;
+                e = e || window.event;
+                /*get the x and y positions of the image:*/
+                a = img.getBoundingClientRect();
+                /*calculate the cursor's x and y coordinates, relative to the image:*/
+                x = e.pageX - a.left;
+                y = e.pageY - a.top;
+                /*consider any page scrolling:*/
+                x = x - window.pageXOffset;
+                y = y - window.pageYOffset;
+                return { x: x, y: y };
+            }
+        }
+    </script>
 </head>
 <style>
 
@@ -29,7 +86,62 @@
         padding-left: 68px;
         margin-top: 0px;
     }
-    
+
+
+    .form-inline {
+        margin-bottom: 0; /* Formların altındaki boşluğu sıfırlar */
+    }
+
+    .input-group-append {
+        margin-left: -10px;
+    }
+
+    .row {
+    margin-right: -10px;
+    margin-left: 0px;
+    }
+
+    ul.breadcrumb {
+        padding: 10px 16px;
+        list-style: none;
+        background-color: #eee;
+    }
+
+        ul.breadcrumb li {
+            display: inline;
+            font-size: 18px;
+        }
+
+            ul.breadcrumb li + li:before {
+                padding: 8px;
+                color: black;
+                content: "/\00a0";
+            }
+
+            ul.breadcrumb li a {
+                color: #0275d8;
+                text-decoration: none;
+            }
+
+                ul.breadcrumb li a:hover {
+                    color: #01447e;
+                    text-decoration: underline;
+                }
+
+
+    .product-detail-information-wrapper {
+        display: flex;
+        justify-content: space-between; /* Öğeleri eşit aralıklarla dağıtır */
+        border-top: 1px solid #ccc; /* İnce bir çizgi ekler */
+        padding: 10px 0; /* İnce çizgiye biraz boşluk ekler */
+    }
+
+    .product-detail-information-item {
+        display: flex;
+        align-items: center; /* İçerikleri dikey olarak hizalar */
+        margin: 0 5px; /* Öğeler arasında yatay boşluk ekler */
+    }
+
 </style>
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -52,11 +164,15 @@
                 </button>
             </form>
             <nav class="navbar">
-                <ul class="nav navbar-nav navbar-right" style="font-size :15px;">
+                <ul class="nav navbar-nav navbar-right" style="font-size :15px;padding-right:65px;margin-right: -300px;">
                     @if (User.Identity.IsAuthenticated)
 
                     {
-                        <li><a href="@Url.Action("UserPage","Home")"> @User.Identity.Name  </a></li>
+                        // Kullanıcı adını al
+                        var userName = User.Identity.Name;
+                        // Kullanıcı adını "@" karakterine kadar olan kısmını al
+                        var userNamePart = userName.Substring(0, userName.IndexOf('@'));
+                        <li><a href="@Url.Action("UserPage","Home")"> @userNamePart</a></li>
                         <li><a href="@Url.Action("Login","Home")"><span class="glyphicon glyphicon-shopping-cart"></span></a></li>
                         <li><a href="@Url.Action("Favorites","Home")"><span class="glyphicon glyphicon-heart"></span></a></li>
                         <li><a href="@Url.Action("Logout","Home")"><span class="glyphicon glyphicon-log-out"></span></a></li>
@@ -73,58 +189,111 @@
                 </div>
     </nav>
 
-	<div class="row">
+    <ul class="breadcrumb">
+        <li><a href="@Url.Action("Index","Home")">AnaSayfa</a></li>
+        <li><a href="@Url.Action("Details","Home")">Ürün İncele</a></li>
+        <li><a href="#">@Model.ProductCategory</a></li>
+        <li><a href="#">@Model.ProductName</a></li>
+    </ul>
 
-        <div class="form-group-row">
-            <label asp-for="ImageUrl" class="col-md-2 col-form-label"> Ürün Resmi: </label>
-            <div class="col-md-10">
-                <input type="hidden" name="ImageUrl" value="@Model.ImageUrl" />
-
-                @if (!string.IsNullOrEmpty(Model.ImageUrl))
-                {
-                    <img src="~/@Model.ImageUrl" alt="Ürün Resmi" style="max-width: 200px; max-height: 200px;" />
-                }
-
+    <div class="row">
+        <div class="col-md-3">
+            <!-- Ürün Resmi -->
+            <input type="hidden" name="ImageUrl" value="@Model.ImageUrl" />
+            @if (!string.IsNullOrEmpty(Model.ImageUrl))
+            {
+                <img src="~/@Model.ImageUrl" alt="Ürün Resmi" style="max-width: 311px; max-height: 312px;" />
+            }
+        </div>
+        <div class="col-md-9">
+            <!-- Ürün Bilgileri -->
+            <h1 class="mb-3">
+                @Model.ProductName
+            </h1>
+            <h6 class="mb-3">
+                Ürün Kodu: @Model.ProductId
+            </h6>
+            <h6 class="mb-3">
+                Ürün Kategorisi: @Model.ProductCategory
+            </h6>
+            <hr />
+            <div class="mb-3">
+                <h4 class="text-primary mb-3">
+                    Ürün Fiyatı : @Model.ProductPrice &#8378;
+                </h4>
+                <div>
+                    <h4 class="text">
+                        Ürün Tanımı : @Model.Description
+                    </h4>
+                </div>
             </div>
 
 
+            <div class="product-detail-information-wrapper">
 
+                <div class="product-detail-information-item">
+                    <img width="30" height="30" loading="lazy" src="https://akn-eh.a-cdn.akinon.net/cms/2023/07/12/ba57d77b-5a0d-4a80-ad0a-3208037b7ca0.png">
 
-	<div class="col-md-9">
-		<h1 class="mb-3">
-			 @Model.ProductName 
-		</h1>
-		<hr />
-		<div class="mb-3">
-			<h4 class="text-primary mb-3">
-				@Model.ProductPrice &#8378;
-			</h4>
+                    <p>APP'e Özel 450 TL ve Üzeri Kargo Bedava</p>
 
-                    <div >
-                        <h4 class="text">
-                            @Model.Description
-                      </h4>
+                </div>
 
-                    
-                            <form asp-controller="Cart" asp-action="AddToCart" method="post" class="form-inline">
-                                <input type="hidden" name="productId" value="@Model.ProductId" />
+                <div class="product-detail-information-item">
+                    <img width="30" height="30" loading="lazy" src="https://akn-eh.a-cdn.akinon.net/cms/2023/07/12/60c5624e-7009-45b7-94b2-ac9dedadeb22.png">
 
-                            <div class="input-group mb-3">
-                                    <input type="number" name="Quantity" class="form-control" value="1" min="1" step="1" style="width:100px;" />
+                    <p>3 İş Gününde Kargo</p>
 
-                                <div class="input-group-append">
-                                    <button type ="submit" class="btn btn-primary">
-                                        <i class="fas fa-cart-plus"> </i> Sepete Ekle
-                                    </button>
+                </div>
 
-                                </div>
+                <div class="product-detail-information-item">
+                    <img width="30" height="30" loading="lazy" src="https://akn-eh.a-cdn.akinon.net/cms/2023/07/12/126d5f4c-ea55-452f-a7ef-83d23f72bc07.png">
+
+                    <p>30 Gün İade Garantisi</p>
+
+                </div>
+
+                <div class="product-detail-information-item">
+                    <img width="30" height="30" loading="lazy" src="https://akn-eh.a-cdn.akinon.net/cms/2023/07/12/72e8bf85-ade7-464a-82a2-4adda4837cae.png">
+
+                    <p>Mağazadan İade</p>
+
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-md-3" style="padding-right:120px;">
+                    <form asp-controller="Cart" asp-action="AddToCart" method="post" class="form-inline">
+                        <input type="hidden" name="productId" value="@Model.ProductId" />
+                        <div class="input-group mb-3">
+                            <input type="number" name="Quantity" class="form-control" value="1" min="1" step="1" style="width:100px; font-size:20px;margin:4px;" />
+                            <div class="input-group-append">
+                                <button type="submit" class="btn btn-primary" style = "margin: 4px;">
+                                    <i class="fas fa-cart-plus"></i> Sepete Ekle
+                                </button>
                             </div>
-                      </form>
-                        
+                        </div>
+                    </form>
+                </div>
+                <div class="col-md-6">
+                    <form asp-controller="Favorite" asp-action="AddToFavorite" method="post" class="form-inline">
+                        <input type="hidden" name="productId" value="@Model.ProductId" />
+                        <div class="input-group mb-3" style ="margin:4px;">
+                            <div class="input-group-append">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-heart"></i> Favorilere Ekle
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
 
+                
+					
 
-                    </div>
-                    </div>
-             
+               
+               
+            </div>
+        </div>
+    </div>
 
 </body>

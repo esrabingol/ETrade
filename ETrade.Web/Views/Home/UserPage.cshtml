@@ -117,7 +117,6 @@
                         var userName = User.Identity.Name;
                         // Kullanıcı adını "@" karakterine kadar olan kısmını al
                         var userNamePart = userName.Substring(0, userName.IndexOf('@'));
-
                         <li><a href="@Url.Action("UserPage","Home")"> @userNamePart</a></li>
                         <li><a href="#"><span class="glyphicon glyphicon-bell"></span> </a></li>
                         <li><a href="@Url.Action("Favorites","Home")"><span class="glyphicon glyphicon-heart"></span></a></li>
@@ -146,9 +145,7 @@
     }
     <div class="container rounded bg-white mt-5 mb-5">
         <div class="row">
-            @*<div class="col-md-3 border-right">
-				<div class="d-flex flex-column align-items-center text-center p-3 py-5"><img class="rounded-circle mt-5" width="200px" src="~/login/images/depositphotos_27612833-stock-illustration-user-icon.jpg"><span class="font-weight-bold">@Model.FirstName.Substring(0, Model.FirstName.IndexOf('@'))</span><span class="text-black-50">@Model.Email</span><span> </span></div>
-            </div>*@
+ 
        <div class="col-md-3 border-right">
     <div class="d-flex flex-column align-items-center text-center p-3 py-5">
         <img class="rounded-circle mt-5" width="200px" src="~/login/images/depositphotos_27612833-stock-illustration-user-icon.jpg">
@@ -173,16 +170,27 @@
                             <div class="col-md-12"><label class="labels">Soyad</label><input type="text" class="form-control" placeholder="LastName" value="@Model.Last_Name" readonly></div>
                             <div class="col-md-12"><label class="labels">Mail Adres</label><input type="text" class="form-control" placeholder="Email" value="@Model.Email" readonly></div>
                             <div class="col-md-6"><label class="labels">Şifre</label><input type="password" class="form-control" placeholder="Password" value="@Model.Password" readonly></div>
+
                             <a href="@Url.Action("ForgotPassword","Home")">Şifremi Unuttum/Şifre Değişikliği</a>
 						</div>
 						<div class="row mt-3">
                             <div class="col-md-12"><label class="labels">Telefon Numarası</label><input type="text" class="form-control" placeholder="Phone" value="@Model.Phone" readonly></div>
 
 						</div>
-					
-				
+
 					</form>
-                
+
+                    <form asp-controller="Home" asp-action="DeleteUser" method="post" onsubmit="return confirm('Hesabınızı silmek istediğinizden emin misiniz?');">
+                        <input type="hidden" name="Email" value="@Model.Email" />
+                        <div class="input-group mb-3">
+                            <div class="input-group-append">
+                                <button type="submit" class="btn btn-danger btn-sm" style="margin: 0px;height:30px;">
+                                    Hesabımı Sil
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+
                 </div>
             </div>
 
@@ -193,12 +201,11 @@
 
                 </div>
             </div>
-        </div>
-    </div>
-    </div>
-    </div>
-    
 
+			
+    </div>
+    </div>
+    </div>
 
     <!--googlechart-->
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
@@ -216,7 +223,7 @@
                 ['Mutfak', 2],
                 ['Ev Eşyaları', 4],
                 ['Yatak Odası', 2],
-                ['Mobillya Ürünleri', 8]
+                ['Mobilya Ürünleri', 8]
             ]);
 
             // Optional; add a title and set the width and height of the chart
@@ -228,5 +235,8 @@
         }
     </script>
     <!--googlechartend-->
+
+
+
 </body>
 </html>

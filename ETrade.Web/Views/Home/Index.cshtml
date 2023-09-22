@@ -33,7 +33,7 @@
     <style>
  .navbar-right {
         float: right !important;
-        margin-right: -312px;
+        margin-right: -554px;
     }
     .nav-item {
         display: flex;
@@ -117,7 +117,7 @@
 
                             <li><a href="@Url.Action("UserPage","Home")"> @userNamePart</a></li>
                             <li><a href="@Url.Action("Index","Cart")"><span class="glyphicon glyphicon-shopping-cart"></span></a></li>
-                            <li><a href="@Url.Action("Favorites","Home")"><span class="glyphicon glyphicon-heart"></span></a></li>
+                            <li><a href="@Url.Action("Index","Favorite")"><span class="glyphicon glyphicon-heart"></span></a></li>
                             <li><a href="@Url.Action("Logout","Home")"><span class="glyphicon glyphicon-log-out"></span></a></li>
                           
                         }
@@ -133,6 +133,20 @@
 
 </nav>
     <div>
+        @if (TempData.ContainsKey("SuccessMessage"))
+        {
+            <div class="alert alert-success">
+
+                @TempData["SuccessMessage"]
+            </div>
+        }
+        @if (TempData.ContainsKey("SuccessMessageOne"))
+        {
+            <div class="alert alert-danger">
+
+                @TempData["SuccessMessageOne"]
+            </div>
+        }
         @if (!string.IsNullOrEmpty(ViewBag.Message))
         {
             <div class="alert alert-danger">
@@ -421,31 +435,30 @@
                     </h3>
                     <ul>
                         <li>
-                            <a href="">
+                            <a href="@Url.Action("BathRoom","Home")">
                                 Banyo Ürünleri
                             </a>
                         </li>
                         <li>
-                            <a href="">
+                            <a href="@Url.Action("LivingRoom","Home")">
                                 Oturma Odası Ürünleri
                             </a>
                         </li>
                         <li>
-                            <a href="">
+                            <a href=""@Url.Action("Kitchen","Home")"">
                                Mutfak Ürünleri
                             </a>
                         </li>
                         <li>
-                            <a href="">
+                            <a href="" @Url.Action("LivingRoom","Home")"">
                                Dekorasyon Ürünleri
                             </a>
                         </li>
                         <li>
-                            <a href="">
-                                Competitions
+                            <a href="" @Url.Action("BedRoom","Home")"">
+                               Yatak & Mobilya Ürünleri
                             </a>
                         </li>
-                      
                     </ul>
                 </div>
                 <div class="col-md-3">

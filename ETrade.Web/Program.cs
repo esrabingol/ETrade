@@ -49,12 +49,14 @@ builder.Services.AddScoped<IAnnouncementRepository, EfCoreAnnouncementRepository
 builder.Services.AddScoped<IProductRepository, EfCoreProductRepository>(); // MemoryProduct üzerinden gelen ile ayný altyapýya sahip
 
 builder.Services.AddScoped<ICartRepository, EfCoreCartRepository>(); 
+builder.Services.AddScoped<IFavoriteRepository, EfCoreFavoriteRepository>();
 
 builder.Services.AddScoped<IAnnouncementService, AnnouncementService>();
 
 builder.Services.AddScoped<IProductService, ProductManager>();
 
 builder.Services.AddScoped<ICartService,CartManager>();
+builder.Services.AddScoped<IFavoriteService,FavoriteManager>();
 
 var app = builder.Build();
 

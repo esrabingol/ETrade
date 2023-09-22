@@ -4,8 +4,7 @@ using ETrade.Entities;
 using ETrade.Web.Abstract;
 using Microsoft.EntityFrameworkCore;
 
-using System.Linq;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+
 
 namespace ETrade.Web.Concrete.EntityFraemwork
 {
